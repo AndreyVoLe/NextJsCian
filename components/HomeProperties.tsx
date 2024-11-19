@@ -1,11 +1,12 @@
 import { NextPage } from 'next'
-import properties from '@/properties.json'
 import PropertyCard from './PropertyCard'
 import Link from 'next/link'
+import { fetchProperties } from '@/utils/fetch'
 
 interface Props {}
 
-const HomeProperties: NextPage<Props> = ({}) => {
+const HomeProperties: NextPage<Props> = async ({}) => {
+  const properties = await fetchProperties()
   const recentProperties = properties
     .sort(() => Math.random() - Math.random())
     .slice(0, 3)

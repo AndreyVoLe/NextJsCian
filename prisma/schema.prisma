@@ -9,6 +9,67 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling // uses a direct connection
+}
+
+
+model User {
+  id        String     @id @default(cuid()) // Уникальный идентификатор
+  email     String     @unique // Электронная почта (уникальная)
+  username  String     // Имя пользователя
+  image     String?    // Изображение (опционально)
+  properties Property[] @relation("properties")
+   // Закладки на объекты недвижимости
+  createdAt DateTime   @default(now()) // Дата создания
+  updatedAt DateTime   @updatedAt 
+  // Дата обновления
+}
+
+model Property {
+  id          String       @id @default(cuid()) // Уникальный идентификатор
+  owner       User         @relation("properties", fields: [ownerId], references: [id]) // Владелец
+  ownerId     String       // ID владельца
+  name        String       // Название
+  type        String       // Тип недвижимости
+  description String?      // Описание (опционально)
+  location    Location[]     @relation("location")// Местоположение
+  beds        Int          // Количество спален
+  baths       Int          // Количество ванных комнат
+  squareFeet  Int          // Площадь в квадратных футах
+  amenities   String[]     // Удобства (массив строк)
+  rates       Rates[]        @relation("rates")// Цены
+  sellerInfo  SellerInfo[]  @relation("sellerinfo") // Информация о продавце
+  images      String[]     // Изображения (массив строк)
+  isFeatured  Boolean      @default(false) // Является ли объект избранным
+  createdAt   DateTime     @default(now()) // Дата создания
+  updatedAt   DateTime     @updatedAt // Дата обновления
+}
+
+model Location {
+  id       String       @id @default(cuid())
+  property Property   @relation("location", fields: [propertyId], references: [id])
+  propertyId String
+  street   String // Улица
+  city     String // Город
+  state    String // Штат
+  zipcode  String // Почтовый индекс
+}
+
+model Rates {
+  id          String       @id @default(cuid())
+  property Property   @relation("rates", fields: [propertyId], references: [id])
+  propertyId String
+  nightly  Float? // Ночная цена (опционально)
+  weekly   Float? // Цены за неделю (опционально)
+  monthly  Float? // Цены за месяц (опционально)
+}
+
+model SellerInfo {
+  id          String       @id @default(cuid())
+  property Property   @relation("sellerinfo", fields: [propertyId], references: [id])
+  propertyId String
+  name  String // Имя продавца
+  email String // Электронная почта
+  phone String // Телефон
 }

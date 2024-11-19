@@ -6,15 +6,28 @@ interface Location {
 }
 
 interface Rates {
-  nightly?: number
-  weekly: number
-  monthly?: number
+  nightly?: number | string
+  weekly: number | string
+  monthly?: number | string
 }
 
 interface SellerInfo {
   name: string
   email: string
   phone: string
+}
+export interface Propert {
+  name: string
+  type: string
+  description: string
+  location: Location
+  beds: number | string
+  baths: number | string
+  square_feet: number | string
+  amenities: string[]
+  rates: Rates
+  seller_info: SellerInfo
+  images: File[]
 }
 
 export interface Property {

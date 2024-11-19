@@ -1,11 +1,15 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
-import properties from '@/properties.json'
 import PropertyCard from '@/components/PropertyCard'
+import { Property } from '@/utils/types/PropertyType'
+import { fetchProperties } from '@/utils/fetch'
 
-interface Props {}
+const PropertiesPage: NextPage = async ({}) => {
+  const properties = await fetchProperties()
+  properties.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  })
 
-const PropertiesPage: NextPage<Props> = ({}) => {
   return (
     <section className="px-4 py-6">
       <div className="container-xl lg:container m-auto px-4 py-6">

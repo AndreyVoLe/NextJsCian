@@ -1,6 +1,7 @@
 'use client'
 
 import { NextPage } from 'next'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -10,14 +11,26 @@ import { FaGoogle } from 'react-icons/fa'
 interface Props {}
 
 const Navbar: NextPage<Props> = ({}) => {
+  const session = false
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
-  const [isLog, setIsLog] = useState(true)
+  const [providers, setProviders] = useState<any>(null)
   const pathname = usePathname()
+
+  // useEffect(() => {
+  //   const setAuthProviders = async () => {
+  //     try {
+  //       const res = await getProviders()
+  //       setProviders(res) // res может быть ProvidersType | null, что теперь соответствует типу состояния
+  //     } catch (error) {
+  //       console.error('Ошибка при получении провайдеров:', error)
+  //     }
+  //   }
+  //   setAuthProviders()
+  // }, [])
 
   const profileDropdownRef = useRef<HTMLDivElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
-
   const handleClickOutside = (event: MouseEvent) => {
     if (
       profileDropdownRef.current &&
@@ -25,7 +38,6 @@ const Navbar: NextPage<Props> = ({}) => {
     ) {
       setProfileDropdownOpen(false)
     }
-
     if (
       mobileMenuRef.current &&
       !mobileMenuRef.current.contains(event.target as Node)
@@ -33,7 +45,6 @@ const Navbar: NextPage<Props> = ({}) => {
       setDropdownOpen(false)
     }
   }
-
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside)
 
@@ -41,7 +52,6 @@ const Navbar: NextPage<Props> = ({}) => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
-
   return (
     <>
       <nav className="bg-blue-700 border-b shadow-lg border-blue-500">
@@ -80,6 +90,7 @@ const Navbar: NextPage<Props> = ({}) => {
               {/* <!-- Logo --> */}
               <Link className="flex flex-shrink-0 items-center" href="/">
                 <Image
+                  priority
                   src="/logo-white.png"
                   alt="PropertyPulse"
                   height={40}
@@ -109,7 +120,7 @@ const Navbar: NextPage<Props> = ({}) => {
                   >
                     Properties
                   </Link>
-                  {isLog && (
+                  {session && (
                     <Link
                       href="/properties/add"
                       className={`${
@@ -124,19 +135,20 @@ const Navbar: NextPage<Props> = ({}) => {
             </div>
 
             {/* <!-- Right Side Menu (Logged Out) --> */}
-            {!isLog && (
+            {!session && (
               <div className="hidden md:block md:ml-6">
                 <div className="flex items-center">
-                  <button className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">
-                    <FaGoogle className="text-white mr-2" />
-                    <span>Login or Register</span>
-                  </button>
+                  <Link href="/login">
+                    <button className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">
+                      <span>Login or Register</span>
+                    </button>
+                  </Link>
                 </div>
               </div>
             )}
 
             {/* <!-- Right Side Menu (Logged In) --> */}
-            {isLog && (
+            {session && (
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
                 <Link href="/messages" className="relative group">
                   <button
@@ -218,6 +230,9 @@ const Navbar: NextPage<Props> = ({}) => {
                       Saved Properties
                     </Link>
                     <button
+                      onClick={() => {
+                        setProfileDropdownOpen(false)
+                      }}
                       className="block px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
                       tabIndex={-1}
@@ -255,7 +270,7 @@ const Navbar: NextPage<Props> = ({}) => {
             >
               Properties
             </Link>
-            {isLog && (
+            {session && (
               <Link
                 href="/properties/add"
                 className={`${
@@ -265,11 +280,12 @@ const Navbar: NextPage<Props> = ({}) => {
                 Add Property
               </Link>
             )}
-            {!isLog && (
-              <button className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-5">
-                <FaGoogle className="text-white mr-2" />
-                <span>Login or Register</span>
-              </button>
+            {!session && (
+              <Link href="/login">
+                <button className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">
+                  <span>Login or Register</span>
+                </button>
+              </Link>
             )}
           </div>
         </div>
