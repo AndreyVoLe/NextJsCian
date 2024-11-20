@@ -3,9 +3,7 @@ import PropertyCard from './PropertyCard'
 import Link from 'next/link'
 import { fetchProperties } from '@/utils/fetch'
 
-interface Props {}
-
-const HomeProperties: NextPage<Props> = async ({}) => {
+const HomeProperties: NextPage = async ({}) => {
   const properties = await fetchProperties()
   const recentProperties = properties
     .sort(() => Math.random() - Math.random())
@@ -20,10 +18,10 @@ const HomeProperties: NextPage<Props> = async ({}) => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {!recentProperties ? (
-              <p>No Properties Found</p>
+              <div>No Properties Found</div>
             ) : (
               recentProperties.map(property => (
-                <PropertyCard key={property._id} property={property} />
+                <PropertyCard key={property.id} property={property} />
               ))
             )}
           </div>

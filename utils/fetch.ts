@@ -15,7 +15,6 @@ async function fetchProperties(): Promise<Property[]> {
 
     return res.json()
   } catch (error) {
-    console.log('Failed to fetch', error)
     return []
   }
 }
@@ -26,15 +25,31 @@ async function fetchProperty(id: string): Promise<Property | null> {
       return null
     }
     const res = await fetch(`${apiDomain}/properties/${id}`)
-
+    const data = res.json()
     if (!res.ok) {
       throw new Error('Failed to fetch data')
     }
-
-    return res.json()
+    return data
   } catch (error) {
     return null
   }
 }
 
-export { fetchProperty, fetchProperties }
+async function fetchUserProperties(userId: string) {
+  if (!userId) {
+    return
+  }
+  try {
+    const res = await fetch(`/api/properties/user/${userId}`)
+    if (!res.ok) {
+      throw new Error('Failed to fetch data')
+    }
+
+    return res
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+export { fetchProperty, fetchProperties, fetchUserProperties }

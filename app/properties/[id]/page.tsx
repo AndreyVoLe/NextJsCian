@@ -1,4 +1,5 @@
 'use client'
+import Loading from '@/app/loading'
 import PropertyDetails from '@/components/PropertyDetails'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
 import { fetchProperty } from '@/utils/fetch'
@@ -10,9 +11,7 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { FaArrowAltCircleLeft } from 'react-icons/fa'
 
-interface Props {}
-
-const Page: NextPage<Props> = ({}) => {
+const Page: NextPage = ({}) => {
   const { id } = useParams()
   const [property, setProperty] = useState<Property | null>(null)
 
@@ -20,7 +19,6 @@ const Page: NextPage<Props> = ({}) => {
     const fetchPropertyData = async () => {
       if (!id) return
       const idString = Array.isArray(id) ? id[0] : id
-
       try {
         const proper = await fetchProperty(idString)
         setProperty(proper)
@@ -33,7 +31,7 @@ const Page: NextPage<Props> = ({}) => {
   return (
     <>
       {!property ? (
-        <h1>Property Not Found</h1>
+        <Loading />
       ) : (
         <>
           <PropertyHeaderImage image={property.images[0]} />
@@ -145,50 +143,58 @@ const Page: NextPage<Props> = ({}) => {
           <section className="bg-blue-50 p-4">
             <div className="container mx-auto">
               <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
-                  <Image
-                    src="/images/properties/a1.jpg"
-                    priority
-                    alt=""
-                    className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <Image
-                    priority
-                    src="/images/properties/a2.jpg"
-                    alt=""
-                    className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <Image
-                    priority
-                    src="/images/properties/a3.jpg"
-                    alt=""
-                    className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <Image
-                    priority
-                    src="/images/properties/a4.jpg"
-                    alt=""
-                    className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                  />
-                </div>
+                {property.images[0] && (
+                  <div className="col-span-2">
+                    <Image
+                      src={property.images[0]}
+                      priority
+                      alt=""
+                      className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                    />
+                  </div>
+                )}
+                {property.images[1] && (
+                  <div className="col-span-2">
+                    <Image
+                      priority
+                      src={property.images[1]}
+                      alt=""
+                      className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                    />
+                  </div>
+                )}
+                {property.images[2] && (
+                  <div className="col-span-2">
+                    <Image
+                      priority
+                      src={property.images[2]}
+                      alt=""
+                      className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                    />
+                  </div>
+                )}
+                {property.images[3] && (
+                  <div className="col-span-2">
+                    <Image
+                      priority
+                      src={property.images[3]}
+                      alt=""
+                      className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </section>

@@ -1,10 +1,7 @@
 import { NextPage } from 'next'
-import Link from 'next/link'
 import Infobox from './Infobox'
 
-interface Props {}
-
-const InfoBoxes: NextPage<Props> = ({}) => {
+const InfoBoxes: NextPage = ({}) => {
   return (
     <section>
       <div className="container-xl lg:container m-auto">

@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 51vw;
+}

@@ -1,50 +1,60 @@
+// Интерфейс для информации о местоположении
 interface Location {
+  id?: string
+  propertyId?: string
   street: string
   city: string
   state: string
   zipcode: string
 }
 
+// Интерфейс для цен
 interface Rates {
-  nightly?: number | string
+  id?: string
+  propertyId?: string
+  nightly: number | string
   weekly: number | string
-  monthly?: number | string
+  monthly: number | string
 }
 
+// Интерфейс для информации о продавце
 interface SellerInfo {
+  id?: string
+  propertyId?: string
   name: string
   email: string
   phone: string
+}
+
+// Основной интерфейс для объекта недвижимости
+export interface Property {
+  id: string
+  ownerId: string
+  name: string
+  type: string
+  description: string
+  beds: number | string
+  baths: number | string
+  squareFeet: number | string
+  amenities: string[]
+  images: string[]
+  isFeatured: boolean
+  createdAt: string // Можно использовать Date, если вы планируете работать с объектами Date
+  updatedAt: string // Аналогично, можно использовать Date
+  location: Location
+  rates: Rates
+  sellerInfo: SellerInfo
 }
 export interface Propert {
   name: string
   type: string
   description: string
-  location: Location
   beds: number | string
   baths: number | string
-  square_feet: number | string
+  squareFeet: number | string
   amenities: string[]
-  rates: Rates
-  seller_info: SellerInfo
-  images: File[]
-}
-
-export interface Property {
-  _id: string
-  owner: string
-  name: string
-  type: string
-  description: string
+  // Аналогично, можно использовать Date
   location: Location
-  beds: number
-  baths: number
-  square_feet: number
-  amenities: string[]
   rates: Rates
-  seller_info: SellerInfo
-  images: string[]
-  is_featured: boolean
-  createdAt: string
-  updatedAt: string
+  sellerInfo: SellerInfo
 }

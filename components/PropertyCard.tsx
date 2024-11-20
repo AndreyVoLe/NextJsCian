@@ -1,6 +1,5 @@
 import { NextPage } from 'next'
 import Image from 'next/image'
-import { Property } from '@/utils/types/PropertyType'
 import {
   FaBed,
   FaBath,
@@ -9,6 +8,7 @@ import {
   FaMapMarker,
 } from 'react-icons/fa'
 import Link from 'next/link'
+import { Property } from '@/utils/types/PropertyType'
 
 interface IPropertyCard {
   property: Property
@@ -28,12 +28,13 @@ const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
   return (
     <div className="rounded-xl shadow-md relative">
       <Image
-        src={`/images/properties/${property.images[0]}`}
+        priority
+        src={property.images[0]}
         alt=""
         width={0}
         height={0}
         sizes="100vw"
-        className="w-full h-auto rounded-t-xl"
+        className="rounded-t-xl bg-cover object-cover w-full h-[300px]"
       />
       <div className="p-4">
         <div className="text-left md:text-center lg:text-left mb-6">
@@ -45,36 +46,36 @@ const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
         </h3>
 
         <div className="flex justify-center gap-4 text-gray-500 mb-4">
-          <p>
+          <div>
             <FaBed className="inline mr-2" /> {property.beds}
             <span className="md:hidden lg:inline">Beds</span>
-          </p>
-          <p>
+          </div>
+          <div>
             <FaBath className="inline mr-2" /> {property.baths}
             <span className="md:hidden lg:inline">Baths</span>
-          </p>
-          <p>
+          </div>
+          <div>
             <FaRulerCombined className="inline mr-2" />
-            {property.square_feet}{' '}
+            {property.squareFeet}
             <span className="md:hidden lg:inline">sqft</span>
-          </p>
+          </div>
         </div>
 
         <div className="flex justify-center gap-4 text-green-900 text-sm mb-4">
-          {property.rates.nightly && (
-            <p>
+          {property.rates.nightly !== 0 && (
+            <div>
               <FaMoneyBill className="inline mr-2" /> Ночь
-            </p>
+            </div>
           )}
-          {property.rates.weekly && (
-            <p>
+          {property.rates.weekly !== 0 && (
+            <div>
               <FaMoneyBill className="inline mr-2" /> Неделя
-            </p>
+            </div>
           )}
-          {property.rates.monthly && (
-            <p>
+          {property.rates.monthly !== 0 && (
+            <div>
               <FaMoneyBill className="inline mr-2" /> Месяц
-            </p>
+            </div>
           )}
         </div>
 
@@ -85,11 +86,11 @@ const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
             <FaMapMarker className="inline text-orange-700 mt-1" />
             <span className="text-orange-700">
               {' '}
-              {property.location.city} {property.location.state}
+              {property.location.city}, {property.location.state}
             </span>
           </div>
           <Link
-            href={`/properties/${property._id}`}
+            href={`/properties/${property.id}`}
             className="h-[36px] bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center text-sm"
           >
             Details

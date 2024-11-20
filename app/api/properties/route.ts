@@ -1,11 +1,21 @@
-import properties from '@/properties.json'
+import { auth } from '@/auth'
+import { prisma } from '@/prisma'
+import cloudinary from '@/config/cloudinary'
 
 export const GET = async () => {
   try {
+    const properties = await prisma.property.findMany({
+      include: {
+        location: true,
+        rates: true,
+        sellerInfo: true,
+      },
+    })
     return new Response(JSON.stringify(properties), {
       status: 200,
     })
   } catch (error) {
+    console.error(error)
     return new Response('Something went wrong', {
       status: 500,
     })
@@ -14,42 +24,106 @@ export const GET = async () => {
 
 export const POST = async (request: Request) => {
   try {
+    const session = await auth()
+
+    if (!session) {
+      return new Response('Unauthorized', { status: 401 })
+    }
+    const userId = session.user?.id
+
     const formData = await request.formData()
 
     const amenities = formData.getAll('amenities')
-    const images = formData
+    const images: any = formData
       .getAll('images')
       .filter((image: any) => image.name !== '')
 
     const propertyData = {
-      type: formData.get('type'),
-      name: formData.get('name'),
-      description: formData.get('description'),
+      type: String(formData.get('type') ?? ''),
+      name: String(formData.get('name') ?? ''),
+      description: String(formData.get('description') ?? ''),
       location: {
-        street: formData.get('location.street'),
-        city: formData.get('location.city'),
-        state: formData.get('location.state'),
-        zipcode: formData.get('location.zipcode'),
+        street: String(formData.get('location.street') ?? ''),
+        city: String(formData.get('location.city') ?? ''),
+        state: String(formData.get('location.state') ?? ''),
+        zipcode: String(formData.get('location.zipcode') ?? ''),
       },
-      beds: formData.get('beds'),
-      baths: formData.get('baths'),
-      square_feet: formData.get('square_feet'),
-      amenities,
+      beds: parseInt(formData.get('beds') as string) || 0,
+      baths: parseInt(formData.get('baths') as string) || 0,
+      square_feet: parseInt(formData.get('square_feet') as string) || 0,
+      amenities: amenities.map(a => String(a)) as string[], // Преобразовали в строки
       rates: {
-        weekly: formData.get('rates.weekly'),
-        monthly: formData.get('rates.monthly'),
-        nightly: formData.get('rates.nightly'),
+        weekly: parseFloat(formData.get('rates.weekly') as string) || 0,
+        monthly: parseFloat(formData.get('rates.monthly') as string) || 0,
+        nightly: parseFloat(formData.get('rates.nightly') as string) || 0,
       },
       seller_info: {
-        name: formData.get('seller_info.name'),
-        email: formData.get('seller_info.email'),
-        phone: formData.get('seller_info.phone'),
+        name: String(formData.get('seller_info.name') ?? ''),
+        email: String(formData.get('seller_info.email') ?? ''),
+        phone: String(formData.get('seller_info.phone') ?? ''),
       },
+      owner: userId,
       images,
     }
-    console.log(propertyData)
-    return new Response(JSON.stringify({ message: 'Succsee' }), { status: 200 })
+
+    const imageUpload = []
+
+    for (const image of images) {
+      const imageBuffer = await image.arrayBuffer()
+      const imageArray = Array.from(new Uint8Array(imageBuffer))
+      const imageData = Buffer.from(imageArray)
+
+      const imageBase64 = imageData.toString('base64')
+      const result = await cloudinary.uploader.upload(
+        `data:image/png;base64,${imageBase64}`,
+        { folder: 'cian' }
+      )
+      imageUpload.push(result.secure_url)
+      const uploadedImages = await Promise.all(imageUpload)
+      propertyData.images = uploadedImages
+    }
+
+    const property = await prisma.property.create({
+      data: {
+        name: propertyData.name,
+        type: propertyData.type,
+        description: propertyData.description,
+        beds: propertyData.beds,
+        baths: propertyData.baths,
+        squareFeet: propertyData.square_feet,
+        amenities: propertyData.amenities,
+        images: propertyData.images,
+        owner: { connect: { id: propertyData.owner } },
+        location: {
+          create: {
+            street: propertyData.location.street,
+            city: propertyData.location.city,
+            state: propertyData.location.state,
+            zipcode: propertyData.location.zipcode,
+          },
+        },
+        rates: {
+          create: {
+            nightly: propertyData.rates.nightly,
+            weekly: propertyData.rates.weekly,
+            monthly: propertyData.rates.monthly,
+          },
+        },
+        sellerInfo: {
+          create: {
+            name: propertyData.seller_info.name,
+            email: propertyData.seller_info.email,
+            phone: propertyData.seller_info.phone,
+          },
+        },
+      },
+    })
+
+    return Response.redirect(
+      `${process.env.NEXTAUTH_URL}/properties/${property.id}`
+    )
   } catch (error) {
+    console.error(error)
     return new Response('Failed to add property', { status: 500 })
   }
 }

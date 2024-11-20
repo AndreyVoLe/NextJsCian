@@ -1,9 +1,15 @@
+'use client'
 import PropertyAddForm from '@/components/PropertyAddForm'
 import { NextPage } from 'next'
+import { useSession } from 'next-auth/react'
+import { redirect } from 'next/navigation'
 
-interface Props {}
+const AddPage: NextPage = ({}) => {
+  const { data: session } = useSession()
 
-const AddPage: NextPage<Props> = ({}) => {
+  if (!session?.user) {
+    redirect('/')
+  }
   return (
     <section className="bg-blue-50">
       <div className="container m-auto max-w-2xl py-24">

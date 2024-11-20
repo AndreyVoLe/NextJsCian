@@ -2,9 +2,7 @@ import { NextPage } from 'next'
 import { FaExclamationTriangle } from 'react-icons/fa'
 import Link from 'next/link'
 
-interface Props {}
-
-const NotFound: NextPage<Props> = ({}) => {
+const NotFound: NextPage = ({}) => {
   return (
     <section className="bg-blue-50 min-h-screen flex-grow">
       <div className="container m-auto max-w-2xl py-24">

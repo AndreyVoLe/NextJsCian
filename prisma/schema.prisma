@@ -33,13 +33,13 @@ model Property {
   name        String       // Название
   type        String       // Тип недвижимости
   description String?      // Описание (опционально)
-  location    Location[]     @relation("location")// Местоположение
+  location    Location?     @relation("location")// Местоположение
   beds        Int          // Количество спален
   baths       Int          // Количество ванных комнат
   squareFeet  Int          // Площадь в квадратных футах
   amenities   String[]     // Удобства (массив строк)
-  rates       Rates[]        @relation("rates")// Цены
-  sellerInfo  SellerInfo[]  @relation("sellerinfo") // Информация о продавце
+  rates       Rates?        @relation("rates")// Цены
+  sellerInfo  SellerInfo?   @relation("sellerinfo") // Информация о продавце
   images      String[]     // Изображения (массив строк)
   isFeatured  Boolean      @default(false) // Является ли объект избранным
   createdAt   DateTime     @default(now()) // Дата создания
@@ -47,29 +47,29 @@ model Property {
 }
 
 model Location {
-  id       String       @id @default(cuid())
-  property Property   @relation("location", fields: [propertyId], references: [id])
-  propertyId String
-  street   String // Улица
-  city     String // Город
-  state    String // Штат
-  zipcode  String // Почтовый индекс
+  id         String     @id @default(cuid())
+  propertyId String     @unique // Убедитесь, что это действительно необходимо
+  property   Property   @relation("location", fields: [propertyId], references: [id], map: "locProp")
+  street     String // Улица
+  city       String // Город
+  state      String // Штат
+  zipcode    String // Почтовый индекс
 }
 
 model Rates {
   id          String       @id @default(cuid())
-  property Property   @relation("rates", fields: [propertyId], references: [id])
-  propertyId String
-  nightly  Float? // Ночная цена (опционально)
-  weekly   Float? // Цены за неделю (опционально)
-  monthly  Float? // Цены за месяц (опционально)
+  propertyId  String       @unique // Убедитесь, что это действительно необходимо
+  property    Property     @relation("rates", fields: [propertyId], references: [id], map: "rateProp")
+  nightly     Float? // Ночная цена (опционально)
+  weekly      Float? // Цены за неделю (опционально)
+  monthly     Float? // Цены за месяц (опционально)
 }
 
 model SellerInfo {
   id          String       @id @default(cuid())
-  property Property   @relation("sellerinfo", fields: [propertyId], references: [id])
-  propertyId String
-  name  String // Имя продавца
-  email String // Электронная почта
-  phone String // Телефон
+  propertyId  String       @unique // Убедитесь, что это действительно необходимо
+  property    Property     @relation("sellerinfo", fields: [propertyId], references: [id], map: "sellProp")
+  name        String // Имя продавца
+  email       String // Электронная почта
+  phone       String // Телефон
 }

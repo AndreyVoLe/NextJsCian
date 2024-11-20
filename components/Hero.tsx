@@ -1,8 +1,6 @@
 import { NextPage } from 'next'
 
-interface Props {}
-
-const Hero: NextPage<Props> = ({}) => {
+const Hero: NextPage = ({}) => {
   return (
     <section className="bg-blue-700 py-20 mb-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">

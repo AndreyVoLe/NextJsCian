@@ -2,9 +2,7 @@ import { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
-interface Props {}
-
-const Footer: NextPage<Props> = ({}) => {
+const Footer: NextPage = ({}) => {
   const currentYear = new Date().getFullYear()
 
   return (

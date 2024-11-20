@@ -12,9 +12,9 @@ const PropertyHeaderImage: NextPage<Props> = ({ image }) => {
         <div className="grid grid-cols-1">
           <Image
             priority
-            src={`/images/properties/${image}`}
-            alt=""
-            className="object-cover h-[400px] w-full"
+            src={image}
+            alt="Нет изображения"
+            className="h-[400px] w-full object-cover"
             width={0}
             height={0}
             sizes="100vw"
