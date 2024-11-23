@@ -20,6 +20,9 @@ model User {
   username  String     // Имя пользователя
   image     String?    // Изображение (опционально)
   properties Property[] @relation("properties")
+  bookmarks String[]
+  sentMessages   Message[]  @relation("sentMessages") // Отправленные сообщения
+  receivedMessages Message[] @relation("receivedMessages") // Полученные сообщения
    // Закладки на объекты недвижимости
   createdAt DateTime   @default(now()) // Дата создания
   updatedAt DateTime   @updatedAt 
@@ -41,7 +44,8 @@ model Property {
   rates       Rates?        @relation("rates")// Цены
   sellerInfo  SellerInfo?   @relation("sellerinfo") // Информация о продавце
   images      String[]     // Изображения (массив строк)
-  isFeatured  Boolean      @default(false) // Является ли объект избранным
+  isFeatured  Boolean      @default(false)
+  messages  Message[]     @relation
   createdAt   DateTime     @default(now()) // Дата создания
   updatedAt   DateTime     @updatedAt // Дата обновления
 }
@@ -72,4 +76,21 @@ model SellerInfo {
   name        String // Имя продавца
   email       String // Электронная почта
   phone       String // Телефон
+}
+
+model Message {
+  id          String   @id @default(cuid()) // Уникальный идентификатор
+  senderId    String   // ID отправителя
+  sender      User     @relation("sentMessages", fields: [senderId], references: [id]) // Отправитель
+  recipientId String   // ID получателя
+  recipient   User     @relation("receivedMessages", fields: [recipientId], references: [id]) // Получатель
+  propertyId  String   // ID недвижимости
+  property    Property @relation(fields: [propertyId], references: [id]) // Недвижимость
+  name        String   // Имя
+  email       String   // Электронная почта
+  phone       String?  // Телефон (опционально)
+  body        String?  // Сообщение (опционально)
+  read        Boolean  @default(false) // Прочитано ли сообщение
+  createdAt   DateTime @default(now()) // Дата создания
+  updatedAt   DateTime @updatedAt // Дата обновления
 }

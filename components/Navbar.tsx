@@ -31,20 +31,24 @@ const Navbar: NextPage = ({}) => {
 
   const profileDropdownRef = useRef<HTMLDivElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
+
   const handleClickOutside = (event: MouseEvent) => {
-    if (
-      profileDropdownRef.current &&
-      !profileDropdownRef.current.contains(event.target as Node)
-    ) {
+    const isProfileDropdown = profileDropdownRef.current?.contains(
+      event.target as Node
+    )
+    const isMobileMenu = mobileMenuRef.current?.contains(event.target as Node)
+
+    // Закрываем дропдаун профиля, если клик вне его
+    if (!isProfileDropdown) {
       setProfileDropdownOpen(false)
     }
-    if (
-      mobileMenuRef.current &&
-      !mobileMenuRef.current.contains(event.target as Node)
-    ) {
+
+    // Закрываем мобильное меню, если клик вне его
+    if (!isMobileMenu) {
       setDropdownOpen(false)
     }
   }
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside)
 
@@ -91,15 +95,14 @@ const Navbar: NextPage = ({}) => {
               {/* <!-- Logo --> */}
               <Link className="flex flex-shrink-0 items-center" href="/">
                 <Image
-                  priority
                   src="/logo-white.png"
-                  alt="PropertyPulse"
+                  alt="Cian"
                   height={40}
                   width={40}
                 />
 
                 <span className="hidden md:block text-white text-2xl font-bold ml-2">
-                  PropertyPulse
+                  Cian
                 </span>
               </Link>
               {/* <!-- Desktop Menu Hidden below md screens --> */}
@@ -219,6 +222,9 @@ const Navbar: NextPage = ({}) => {
                     tabIndex={-1}
                   >
                     <Link
+                      onClick={() => {
+                        setProfileDropdownOpen(false)
+                      }}
                       href="/profile"
                       className="block px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
@@ -227,7 +233,11 @@ const Navbar: NextPage = ({}) => {
                     >
                       Your Profile
                     </Link>
+
                     <Link
+                      onClick={() => {
+                        setProfileDropdownOpen(false)
+                      }}
                       href="/properties/saved"
                       className="block px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
@@ -263,6 +273,7 @@ const Navbar: NextPage = ({}) => {
         >
           <div className="space-y-1 px-2 pb-3 pt-2">
             <Link
+              onClick={() => setDropdownOpen(false)}
               href="/"
               className={`${
                 pathname === '/' ? 'bg-black' : ''
@@ -271,6 +282,7 @@ const Navbar: NextPage = ({}) => {
               Home
             </Link>
             <Link
+              onClick={() => setDropdownOpen(false)}
               href="/properties"
               className={`${
                 pathname === '/properties' ? 'bg-black' : ''
@@ -280,6 +292,7 @@ const Navbar: NextPage = ({}) => {
             </Link>
             {session && (
               <Link
+                onClick={() => setDropdownOpen(false)}
                 href="/properties/add"
                 className={`${
                   pathname === '/properties/add' ? 'bg-black' : ''
@@ -293,7 +306,10 @@ const Navbar: NextPage = ({}) => {
               Object.values(providers).map((provider: any, index) => (
                 <button
                   key={index}
-                  onClick={() => signIn(provider.id)}
+                  onClick={() => {
+                    signIn(provider.id)
+                    setDropdownOpen(false)
+                  }}
                   className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
                 >
                   <FaGoogle className="text-white mr-2" />

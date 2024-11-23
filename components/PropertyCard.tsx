@@ -22,7 +22,7 @@ const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
     } else if (rates.weekly) {
       return `${rates.weekly.toLocaleString()}/неделя`
     } else if (rates.nightly) {
-      return `${rates.weekly.toLocaleString()}/ночь`
+      return `${rates.nightly.toLocaleString()}/ночь`
     }
   }
   return (

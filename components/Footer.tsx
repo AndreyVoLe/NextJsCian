@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const Footer: NextPage = ({}) => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = 2024
 
   return (
     <footer className="bg-gray-200 py-4 mt-auto">

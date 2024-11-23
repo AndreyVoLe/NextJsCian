@@ -42,11 +42,12 @@ const ProfilePage: NextPage = ({}) => {
         const updatedProperties = properties.filter(proper => proper.id !== id)
 
         setProperties(updatedProperties)
+        alert('Вы успешно удалили лот недвижимости')
       } else {
-        alert('Failed t')
+        alert('Не удалось удалить')
       }
     } catch (error) {
-      alert('Failed to delete')
+      alert('Не удалось удалить')
     }
   }
 

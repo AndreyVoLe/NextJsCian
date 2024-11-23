@@ -1,8 +1,3 @@
-'use client'
-
-import { Propert } from '@/utils/types/PropertyType'
-import { ChangeEvent, useState } from 'react'
-
 const PropertyAddForm = () => {
   return (
     <form action="/api/properties" method="POST" encType="multipart/form-data">
@@ -454,6 +449,7 @@ const PropertyAddForm = () => {
           accept="image/*"
           multiple
           required
+          max={4}
           // onChange={handleImageChange}
         />
       </div>

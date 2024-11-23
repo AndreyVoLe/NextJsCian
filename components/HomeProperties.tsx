@@ -6,7 +6,8 @@ import { fetchProperties } from '@/utils/fetch'
 const HomeProperties: NextPage = async ({}) => {
   const properties = await fetchProperties()
   const recentProperties = properties
-    .sort(() => Math.random() - Math.random())
+    .reverse()
+
     .slice(0, 3)
 
   return (

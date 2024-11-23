@@ -58,3 +58,24 @@ export interface Propert {
   rates: Rates
   sellerInfo: SellerInfo
 }
+
+export interface Message {
+  id: string // Уникальный идентификатор
+  senderId: string // ID отправителя
+  sender: {
+    username: string // Имя отправителя
+  }
+  recipientId: string // ID получателя
+  propertyId: string // ID недвижимости
+  property: {
+    name: string
+    id: string // Название недвижимости
+  }
+  name: string // Имя
+  email: string // Электронная почта
+  phone?: string // Телефон (опционально)
+  body?: string // Сообщение (опционально)
+  read: boolean // Прочитано ли сообщение
+  createdAt: Date // Дата создания
+  updatedAt: Date // Дата обновления
+}
