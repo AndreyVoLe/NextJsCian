@@ -1,5 +1,5 @@
 'use client'
-import Loading from '@/app/loading'
+import Loading from '@/app/(project)/loading'
 import PropertyCard from '@/components/PropertyCard'
 import PropertySearch from '@/components/PropertySearch'
 import { Property } from '@/utils/types/PropertyType'

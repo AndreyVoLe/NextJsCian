@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import MessagesCard from './MessagesCard'
 import { Message } from '@/utils/types/PropertyType'
-import Loading from '@/app/loading'
+import Loading from '@/app/(project)/loading'
 
 const Messages = () => {
   const [messages, setMessages] = useState<Message[]>([])

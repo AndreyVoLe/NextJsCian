@@ -1,5 +1,5 @@
 'use client'
-import Loading from '@/app/loading'
+import Loading from '@/app/(project)/loading'
 import PropertyCard from '@/components/PropertyCard'
 import { Property } from '@/utils/types/PropertyType'
 import { NextPage } from 'next'

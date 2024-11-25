@@ -2,9 +2,10 @@
 import { NextPage } from 'next'
 import PropertyCard from '@/components/PropertyCard'
 import { useEffect, useState } from 'react'
-import Loading from '../loading'
+
 import { Property } from '@/utils/types/PropertyType'
 import Pagination from '@/components/Pagination'
+import Loading from '../loading'
 
 const PropertiesPage: NextPage = ({}) => {
   const [properties, setProperties] = useState<Property[]>([])

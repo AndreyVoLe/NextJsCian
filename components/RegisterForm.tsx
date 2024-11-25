@@ -1,6 +1,6 @@
 'use client'
-import { LoginSchema } from '@/schemas'
-import { login } from '@/utils/actions/login'
+import { RegisterSchema } from '@/schemas'
+import { registerAction } from '@/utils/actions/register'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
@@ -8,7 +8,7 @@ import { FaEye } from 'react-icons/fa'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
 
-const LoginForm = ({}) => {
+const RegisterForm = ({}) => {
   const [isPending, startTransition] = useTransition()
 
   const [showPassword, setShowPassword] = useState(false)
@@ -18,18 +18,22 @@ const LoginForm = ({}) => {
 
   const {
     register,
+
     handleSubmit,
+
     formState: { errors },
-  } = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  } = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: '',
       password: '',
+      confirmPassword: '',
+      name: '',
     },
   })
-  const onSubmit = (data: z.infer<typeof LoginSchema>) => {
+  const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
     startTransition(async () => {
-      const res = await login(data)
+      const res = await registerAction(data)
       console.log(res)
       if (res.error) {
         toast.error(res.error)
@@ -66,6 +70,28 @@ const LoginForm = ({}) => {
       </div>
       <div className="mb-6">
         <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Имя
+        </label>
+        <input
+          {...register('name')}
+          id="name"
+          type="name"
+          disabled={isPending}
+          required
+          className={`mt-1 block w-full p-2 border ${
+            errors.name ? 'border-red-500' : 'border-gray-300'
+          } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          placeholder="Введите ваш email"
+        />
+        {errors.name && (
+          <p className="text-red-500 text-sm">{errors.name.message}</p>
+        )}
+      </div>
+      <div className="mb-6">
+        <label
           htmlFor="password"
           className="block text-sm font-medium text-gray-700"
         >
@@ -97,6 +123,41 @@ const LoginForm = ({}) => {
           <p className="text-red-500 text-sm">{errors.password.message}</p>
         )}
       </div>
+      <div className="mb-6">
+        <label
+          htmlFor="confirmPassword"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Подтвердите пароль
+        </label>
+        <div className="relative">
+          <input
+            {...register('confirmPassword')}
+            id="confirmPassword"
+            disabled={isPending}
+            type={showPassword ? 'text' : 'password'}
+            required
+            className={`mt-1 block w-full p-2 border ${
+              errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            placeholder="Введите ваш пароль"
+          />
+          <button
+            type="button"
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+          >
+            <FaEye />
+          </button>
+        </div>
+        {errors.confirmPassword && (
+          <p className="text-red-500 text-sm">
+            {errors.confirmPassword.message}
+          </p>
+        )}
+      </div>
 
       <button
         type="submit"
@@ -107,10 +168,10 @@ const LoginForm = ({}) => {
         }`}
         disabled={isPending}
       >
-        Войти
+        Регистрация
       </button>
     </form>
   )
 }
 
-export default LoginForm
+export default RegisterForm

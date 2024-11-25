@@ -1,5 +1,5 @@
 'use client'
-import Loading from '@/app/loading'
+import Loading from '@/app/(project)/loading'
 import AsideForm from '@/components/AsideForm'
 import BookmarkButton from '@/components/BookmarkButton'
 import PropertyDetails from '@/components/PropertyDetails'

@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '~react-toastify/dist/ReactToastify.min.css';
+
 .layout {
   display: grid;
   grid-template-rows: auto 1fr auto;

@@ -1,4 +1,4 @@
-import Loading from '@/app/loading'
+import Loading from '@/app/(project)/loading'
 import { useGlobalContext } from '@/context/GlobalContext'
 import { timeTo24 } from '@/utils/time24h'
 import { Message } from '@/utils/types/PropertyType'
