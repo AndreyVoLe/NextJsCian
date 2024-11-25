@@ -35,12 +35,12 @@ export interface Property {
   description: string
   beds: number | string
   baths: number | string
-  squareFeet: number | string
-  amenities: string[]
+  squareFeet?: number | string
+  amenities?: string[]
   images: string[]
-  isFeatured: boolean
-  createdAt: string // Можно использовать Date, если вы планируете работать с объектами Date
-  updatedAt: string // Аналогично, можно использовать Date
+  isFeatured?: boolean
+  createdAt?: string // Можно использовать Date, если вы планируете работать с объектами Date
+  updatedAt?: string // Аналогично, можно использовать Date
   location: Location
   rates: Rates
   sellerInfo: SellerInfo

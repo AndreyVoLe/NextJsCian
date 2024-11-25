@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { fetchUserProperties } from '@/utils/fetch'
+import { toast } from 'react-toastify'
 
 const ProfilePage: NextPage = ({}) => {
   const { data: session } = useSession()
@@ -42,12 +43,12 @@ const ProfilePage: NextPage = ({}) => {
         const updatedProperties = properties.filter(proper => proper.id !== id)
 
         setProperties(updatedProperties)
-        alert('Вы успешно удалили лот недвижимости')
+        toast.success('Вы успешно удалили лот недвижимости')
       } else {
-        alert('Не удалось удалить')
+        toast.error('Не удалось удалить')
       }
     } catch (error) {
-      alert('Не удалось удалить')
+      toast.error('Не удалось удалить')
     }
   }
 

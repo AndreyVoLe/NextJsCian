@@ -3,6 +3,7 @@ import { Property } from '@/utils/types/PropertyType'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { FaBookmark } from 'react-icons/fa'
+import { toast } from 'react-toastify'
 
 export default function BookmarkButton({ propertyId }: { propertyId: string }) {
   const { data: session } = useSession()
@@ -12,7 +13,7 @@ export default function BookmarkButton({ propertyId }: { propertyId: string }) {
 
   const handleClick = async () => {
     if (!userId) {
-      alert('Вы не зарегистрированы')
+      toast.error('Вы не зарегистрированы')
       return
     }
     try {
@@ -29,8 +30,10 @@ export default function BookmarkButton({ propertyId }: { propertyId: string }) {
         const data = await res.json()
         if (data.message == 'Недвижимость добавлена в закладки') {
           setIsBookmarked(true)
+          toast.success('Недвижимость добавлена в закладки')
         } else {
           setIsBookmarked(false)
+          toast.error('Недвижимость удалена из закладок')
         }
       }
     } catch (error) {
@@ -59,7 +62,7 @@ export default function BookmarkButton({ propertyId }: { propertyId: string }) {
         }
       } catch (error) {
         console.error(error)
-        alert('Что-то пошло не так, попробуй позже')
+        toast.error('Что-то пошло не так, попробуй позже')
       } finally {
         setLoading(false)
       }

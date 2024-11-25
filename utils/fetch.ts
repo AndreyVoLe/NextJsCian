@@ -1,19 +1,19 @@
 import { Property } from './types/PropertyType'
 const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || null
 
-async function fetchProperties(): Promise<Property[]> {
+async function fetchProperties(): Promise<any> {
   try {
     if (!apiDomain) {
       return []
     }
 
     const res = await fetch(`${apiDomain}/properties`)
-
+    const data = res.json()
     if (!res.ok) {
       throw new Error('Failed to fetch data')
     }
 
-    return res.json()
+    return data
   } catch (error) {
     return []
   }

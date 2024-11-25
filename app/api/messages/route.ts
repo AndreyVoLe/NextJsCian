@@ -31,6 +31,9 @@ export const GET = async () => {
         },
       },
     })
+    messages.sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    })
 
     return new Response(JSON.stringify(messages), { status: 200 })
   } catch (error) {

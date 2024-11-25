@@ -1,17 +1,34 @@
 import { auth } from '@/auth'
 import { prisma } from '@/prisma'
 import cloudinary from '@/config/cloudinary'
+import { NextRequest } from 'next/server'
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
   try {
+    const page = req.nextUrl.searchParams.get('page') || 1
+    const pageSize = req.nextUrl.searchParams.get('pageSize') || 6
+
+    const skip = (Number(page) - 1) * Number(pageSize)
+
+    const total = await prisma.property.count()
+
     const properties = await prisma.property.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip,
+      take: Number(pageSize),
       include: {
         location: true,
         rates: true,
         sellerInfo: true,
       },
     })
-    return new Response(JSON.stringify(properties), {
+    const result = {
+      total,
+      properties,
+    }
+    return new Response(JSON.stringify(result), {
       status: 200,
     })
   } catch (error) {

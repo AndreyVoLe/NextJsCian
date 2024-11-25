@@ -4,6 +4,7 @@ import AsideForm from '@/components/AsideForm'
 import BookmarkButton from '@/components/BookmarkButton'
 import PropertyDetails from '@/components/PropertyDetails'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
+import PropertyImages from '@/components/PropertyImages'
 import ShareButton from '@/components/ShareButton'
 import { fetchProperty } from '@/utils/fetch'
 import { Property } from '@/utils/types/PropertyType'
@@ -70,64 +71,7 @@ const Page: NextPage = ({}) => {
             </div>
           </section>
 
-          <section className="bg-blue-50 p-4">
-            <div className="container mx-auto">
-              <div className="grid grid-cols-2 gap-4">
-                {property.images[0] && (
-                  <div className="col-span-2">
-                    <Image
-                      src={property.images[0]}
-                      priority
-                      alt=""
-                      className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                    />
-                  </div>
-                )}
-                {property.images[1] && (
-                  <div className="col-span-2">
-                    <Image
-                      priority
-                      src={property.images[1]}
-                      alt=""
-                      className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                    />
-                  </div>
-                )}
-                {property.images[2] && (
-                  <div className="col-span-2">
-                    <Image
-                      priority
-                      src={property.images[2]}
-                      alt=""
-                      className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                    />
-                  </div>
-                )}
-                {property.images[3] && (
-                  <div className="col-span-2">
-                    <Image
-                      priority
-                      src={property.images[3]}
-                      alt=""
-                      className="object-cover h-[400px] w-full rounded-xl cursor-pointer"
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
+          <PropertyImages images={property.images} />
         </>
       )}
     </>

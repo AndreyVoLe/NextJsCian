@@ -1,14 +1,44 @@
+'use client'
 import { NextPage } from 'next'
 import PropertyCard from '@/components/PropertyCard'
-import { fetchProperties } from '@/utils/fetch'
+import { useEffect, useState } from 'react'
+import Loading from '../loading'
+import { Property } from '@/utils/types/PropertyType'
+import Pagination from '@/components/Pagination'
 
-const PropertiesPage: NextPage = async ({}) => {
-  const properties = await fetchProperties()
-  properties.sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  })
+const PropertiesPage: NextPage = ({}) => {
+  const [properties, setProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(6)
+  const [total, setTotal] = useState(0)
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await fetch(
+          `/api/properties?page=${page}&pageSize=${pageSize}`
+        )
+        if (!res.ok) return
 
-  return (
+        const data = await res.json()
+        setProperties(data.properties)
+        setTotal(data.total)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProperties()
+  }, [page, pageSize])
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+  }
+
+  return loading ? (
+    <Loading />
+  ) : (
     <section className="px-4 py-6">
       <div className="container-xl lg:container m-auto px-4 py-6">
         {properties.length === 0 ? (
@@ -19,6 +49,14 @@ const PropertiesPage: NextPage = async ({}) => {
               <PropertyCard key={property.id} property={property} />
             ))}
           </div>
+        )}
+        {total > pageSize && (
+          <Pagination
+            page={page}
+            pageSize={pageSize}
+            total={total}
+            onPageChange={handlePageChange}
+          />
         )}
       </div>
     </section>

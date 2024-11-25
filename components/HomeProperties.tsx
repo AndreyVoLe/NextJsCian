@@ -2,13 +2,10 @@ import { NextPage } from 'next'
 import PropertyCard from './PropertyCard'
 import Link from 'next/link'
 import { fetchProperties } from '@/utils/fetch'
+import { Property } from '@/utils/types/PropertyType'
 
 const HomeProperties: NextPage = async ({}) => {
-  const properties = await fetchProperties()
-  const recentProperties = properties
-    .reverse()
-
-    .slice(0, 3)
+  const data = await fetchProperties()
 
   return (
     <>
@@ -18,10 +15,10 @@ const HomeProperties: NextPage = async ({}) => {
             Recent Properties
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {!recentProperties ? (
+            {!data.properties ? (
               <div>No Properties Found</div>
             ) : (
-              recentProperties.map(property => (
+              data.properties.map((property: Property) => (
                 <PropertyCard key={property.id} property={property} />
               ))
             )}

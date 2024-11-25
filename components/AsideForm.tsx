@@ -3,6 +3,7 @@
 import { Property } from '@/utils/types/PropertyType'
 import { FormEvent, useState } from 'react'
 import { FaPaperPlane } from 'react-icons/fa'
+import { toast } from 'react-toastify'
 export default function AsideForm({ property }: { property: Property }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -30,8 +31,9 @@ export default function AsideForm({ property }: { property: Property }) {
       const dataRes = await res.json()
       if (res.status === 200) {
         setIsSubmitted(true)
+        toast.success(dataRes.message)
       } else {
-        alert(dataRes.message)
+        toast.error(dataRes.message)
       }
     } catch (error) {
       console.error(error)

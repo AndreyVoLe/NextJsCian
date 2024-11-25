@@ -4,6 +4,7 @@ import PropertyCard from '@/components/PropertyCard'
 import { Property } from '@/utils/types/PropertyType'
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 interface Props {}
 
@@ -21,14 +22,13 @@ const Page: NextPage<Props> = ({}) => {
         }
       } catch (error) {
         console.error(error)
-        alert('Что-то пошло не так')
+        toast.error('Что-то пошло не так')
       } finally {
         setLoading(false)
       }
     }
     fetchProperties()
   }, [])
-  console.log(properties)
 
   if (loading) {
     return <Loading />
