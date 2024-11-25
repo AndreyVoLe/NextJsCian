@@ -32,15 +32,15 @@ export interface Property {
   ownerId: string
   name: string
   type: string
-  description: string
+  description?: string | null
   beds: number | string
   baths: number | string
   squareFeet?: number | string
   amenities?: string[]
   images: string[]
   isFeatured?: boolean
-  createdAt?: string // Можно использовать Date, если вы планируете работать с объектами Date
-  updatedAt?: string // Аналогично, можно использовать Date
+  createdAt?: Date // Можно использовать Date, если вы планируете работать с объектами Date
+  updatedAt?: Date // Аналогично, можно использовать Date
   location: Location
   rates: Rates
   sellerInfo: SellerInfo

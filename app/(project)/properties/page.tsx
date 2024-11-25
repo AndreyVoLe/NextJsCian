@@ -11,7 +11,7 @@ const PropertiesPage: NextPage = ({}) => {
   const [properties, setProperties] = useState<Property[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(6)
+  const pageSize = 6
   const [total, setTotal] = useState(0)
   useEffect(() => {
     const fetchProperties = async () => {

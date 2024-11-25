@@ -88,7 +88,7 @@ const PropertyDetails: NextPage<Props> = ({ property }) => {
         <h3 className="text-lg font-bold mb-6">Amenities</h3>
 
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 list-none">
-          {property.amenities.map((amen, index) => (
+          {property?.amenities?.map((amen, index) => (
             <li key={index}>
               <FaCheck className="text-green-600 mr-2 mt-3 inline-block mb-3" />{' '}
               {amen}

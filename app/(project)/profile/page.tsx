@@ -49,6 +49,7 @@ const ProfilePage: NextPage = ({}) => {
       }
     } catch (error) {
       toast.error('Не удалось удалить')
+      console.error(error)
     }
   }
 

@@ -6,9 +6,7 @@ import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-interface Props {}
-
-const Page: NextPage<Props> = ({}) => {
+const Page: NextPage = () => {
   const [properties, setProperties] = useState<Property[]>([])
   const [loading, setLoading] = useState(true)
 

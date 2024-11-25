@@ -1,7 +1,32 @@
+'use client'
+import { addProperty } from '@/utils/actions/properties'
+import { useRouter } from 'next/navigation'
+import { useActionState, useEffect } from 'react'
+import { toast } from 'react-toastify'
+
 const PropertyAddForm = () => {
+  const router = useRouter()
+  const [state, action, isPending] = useActionState(addProperty, null)
+
+  useEffect(() => {
+    if (state?.error) {
+      toast.error(state.error)
+    }
+  }, [state?.error])
+
+  // Перенаправление при успешном добавлении
+  useEffect(() => {
+    if (state?.id) {
+      toast.success('Недвижимость успешно добавлена')
+      router.push(`/properties/${state.id}`)
+    }
+  }, [state?.id, router])
+
   return (
-    <form action="/api/properties" method="POST" encType="multipart/form-data">
-      <h2 className="text-3xl text-center font-semibold mb-6">Add Property</h2>
+    <form action={action}>
+      <h2 className="text-3xl text-center font-semibold mb-6">
+        Добавить недвижимость
+      </h2>
 
       <div className="mb-4">
         <label htmlFor="type" className="block text-gray-700 font-bold mb-2">
@@ -456,8 +481,13 @@ const PropertyAddForm = () => {
 
       <div>
         <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
+          className={`${
+            isPending
+              ? 'opacity-50 cursor-not-allowed bg-slate-500 hover:bg-slate-600'
+              : 'bg-blue-500 hover:bg-blue-600'
+          } text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline`}
           type="submit"
+          disabled={isPending}
         >
           Add Property
         </button>
@@ -465,5 +495,4 @@ const PropertyAddForm = () => {
     </form>
   )
 }
-
 export default PropertyAddForm

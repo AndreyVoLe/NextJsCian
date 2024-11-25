@@ -1,15 +1,11 @@
-'use client'
 import PropertyAddForm from '@/components/PropertyAddForm'
-import { NextPage } from 'next'
-import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
+import { Metadata, NextPage } from 'next'
 
+export const metadata: Metadata = {
+  title: 'Cian | Добавить недвижимость',
+  description: 'Добавьте свою недвижимость',
+}
 const AddPage: NextPage = ({}) => {
-  const { data: session } = useSession()
-
-  if (!session?.user) {
-    redirect('/')
-  }
   return (
     <section className="bg-blue-50">
       <div className="container m-auto max-w-2xl py-24">

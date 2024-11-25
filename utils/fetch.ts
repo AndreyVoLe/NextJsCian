@@ -1,4 +1,4 @@
-import { Property } from './types/PropertyType'
+import { Propert, Property } from './types/PropertyType'
 const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || null
 
 async function fetchProperties(): Promise<any> {
@@ -19,7 +19,7 @@ async function fetchProperties(): Promise<any> {
   }
 }
 
-async function fetchProperty(id: string): Promise<Property | null> {
+async function fetchProperty(id: string): Promise<any> {
   try {
     if (!apiDomain) {
       return null

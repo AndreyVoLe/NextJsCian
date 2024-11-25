@@ -1,11 +1,11 @@
 import { NextPage } from 'next'
 import PropertyCard from './PropertyCard'
 import Link from 'next/link'
-import { fetchProperties } from '@/utils/fetch'
 import { Property } from '@/utils/types/PropertyType'
+import { fetchThreeProperties } from '@/utils/actions/properties'
 
 const HomeProperties: NextPage = async ({}) => {
-  const data = await fetchProperties()
+  const properties = await fetchThreeProperties()
 
   return (
     <>
@@ -15,10 +15,10 @@ const HomeProperties: NextPage = async ({}) => {
             Recent Properties
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {!data.properties ? (
+            {!properties ? (
               <div>No Properties Found</div>
             ) : (
-              data.properties.map((property: Property) => (
+              properties.map((property: Property) => (
                 <PropertyCard key={property.id} property={property} />
               ))
             )}
@@ -30,7 +30,7 @@ const HomeProperties: NextPage = async ({}) => {
           href="/properties"
           className="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700"
         >
-          View All Properties
+          Посмотреть все
         </Link>
       </section>
     </>

@@ -7,7 +7,7 @@ import PropertyHeaderImage from '@/components/PropertyHeaderImage'
 import PropertyImages from '@/components/PropertyImages'
 import ShareButton from '@/components/ShareButton'
 import { fetchProperty } from '@/utils/fetch'
-import { Property } from '@/utils/types/PropertyType'
+import { Propert, Property } from '@/utils/types/PropertyType'
 import { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -24,8 +24,8 @@ const Page: NextPage = ({}) => {
       if (!id) return
       const idString = Array.isArray(id) ? id[0] : id
       try {
-        const proper = await fetchProperty(idString)
-        setProperty(proper)
+        const res = await fetchProperty(idString)
+        setProperty(res)
       } catch (error) {
         console.error('Error fetching property:', error)
       }

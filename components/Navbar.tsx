@@ -1,6 +1,5 @@
 'use client'
 
-import { useGlobalContext } from '@/context/GlobalContext'
 import { NextPage } from 'next'
 import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
 
