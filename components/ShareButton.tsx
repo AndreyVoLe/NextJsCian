@@ -1,4 +1,4 @@
-import { Property } from '@/utils/types/PropertyType'
+'use client'
 import {
   EmailShareButton,
   MailruShareButton,

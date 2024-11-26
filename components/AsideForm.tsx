@@ -1,59 +1,39 @@
 'use client'
-
+import { sentMessage } from '@/utils/actions/messages'
 import { Property } from '@/utils/types/PropertyType'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useActionState, useRef, useState } from 'react'
 import { FaPaperPlane } from 'react-icons/fa'
 import { toast } from 'react-toastify'
-export default function AsideForm({ property }: { property: Property }) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [message, setMessage] = useState('')
-  const [phone, setPhone] = useState('')
-  const [isSubmitted, setIsSubmitted] = useState(false)
 
+const AsideFormTest = ({ property }: { property: Property }) => {
+  const [pending, setPending] = useState(false)
+  const ref = useRef<HTMLFormElement | null>(null)
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const data = {
-      name,
-      email,
-      phone,
-      message,
-      recipient: property.ownerId,
-      property: property.id,
-    }
-
-    try {
-      const res = await fetch('/api/messages', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' },
-      })
-      const dataRes = await res.json()
-      if (res.status === 200) {
-        setIsSubmitted(true)
-        toast.success(dataRes.message)
-      } else {
-        toast.error(dataRes.message)
+    setPending(true)
+    const formData = new FormData(e.currentTarget)
+    const recipient = property.ownerId
+    const propertyId = property.id
+    const res = await sentMessage(formData, recipient, propertyId)
+    if (res.message === 'Сообщение успешно отправлено') {
+      if (ref.current) {
+        ref.current.reset()
       }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setName('')
-      setEmail('')
-      setPhone('')
-      setMessage('')
+      toast.success(res.message)
+    } else {
+      toast.error(res.message)
     }
+    setPending(false)
   }
-  return isSubmitted ? (
-    <p className="text-green-500 mb-4"> Твоё сообщение успешно отправлено</p>
-  ) : (
-    <form onSubmit={handleSubmit}>
+
+  return (
+    <form ref={ref} onSubmit={handleSubmit}>
       <div className="mb-4">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="name"
         >
-          Name:
+          Имя:
         </label>
         <input
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -62,8 +42,6 @@ export default function AsideForm({ property }: { property: Property }) {
           type="text"
           placeholder="Enter your name"
           required
-          value={name}
-          onChange={e => setName(e.target.value)}
         />
       </div>
       <div className="mb-4">
@@ -71,7 +49,7 @@ export default function AsideForm({ property }: { property: Property }) {
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="email"
         >
-          Email:
+          Почта:
         </label>
         <input
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -80,8 +58,6 @@ export default function AsideForm({ property }: { property: Property }) {
           type="email"
           placeholder="Enter your email"
           required
-          value={email}
-          onChange={e => setEmail(e.target.value)}
         />
       </div>
       <div className="mb-4">
@@ -89,7 +65,7 @@ export default function AsideForm({ property }: { property: Property }) {
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="phone"
         >
-          Phone:
+          Телефон:
         </label>
         <input
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -97,8 +73,6 @@ export default function AsideForm({ property }: { property: Property }) {
           name="phone"
           type="text"
           placeholder="Enter your phone number"
-          value={phone}
-          onChange={e => setPhone(e.target.value)}
         />
       </div>
       <div className="mb-4">
@@ -106,26 +80,28 @@ export default function AsideForm({ property }: { property: Property }) {
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="message"
         >
-          Message:
+          Сообщение:
         </label>
         <textarea
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 h-44 focus:outline-none focus:shadow-outline"
           id="message"
           name="message"
           placeholder="Enter your message"
-          value={message}
-          onChange={e => setMessage(e.target.value)}
         ></textarea>
       </div>
       <div>
         <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline flex items-center justify-center"
+          className="transition duration-200 bg-blue-500 hover:bg-blue-600
+           text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline flex items-center justify-center disable"
           type="submit"
+          disabled={pending}
         >
-          <FaPaperPlane className=" mr-2" />
-          Send Message
+          <FaPaperPlane className="mr-2" />
+          Отправить сообщение
         </button>
       </div>
     </form>
   )
 }
+
+export default AsideFormTest

@@ -28,15 +28,17 @@ const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
   }
   return (
     <div className="rounded-xl shadow-md relative">
-      <Image
-        priority
-        src={property.images[0]}
-        alt=""
-        width={0}
-        height={0}
-        sizes="100vw"
-        className="rounded-t-xl bg-cover object-cover w-full h-[300px]"
-      />
+      <Link href={`/properties/${property.id}`}>
+        <Image
+          priority
+          src={property.images[0]}
+          alt=""
+          width={0}
+          height={0}
+          sizes="100vw"
+          className="rounded-t-xl bg-cover object-cover w-full h-[300px]"
+        />
+      </Link>
       <div className="p-4">
         <div className="text-left md:text-center lg:text-left mb-6">
           <div className="text-gray-600">{property.type}</div>

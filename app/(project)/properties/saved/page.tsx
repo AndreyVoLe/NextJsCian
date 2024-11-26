@@ -1,37 +1,10 @@
-'use client'
-import Loading from '@/app/(project)/loading'
 import PropertyCard from '@/components/PropertyCard'
+import { fetchSavedProperties } from '@/utils/actions/properties'
 import { Property } from '@/utils/types/PropertyType'
 import { NextPage } from 'next'
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 
-const Page: NextPage = () => {
-  const [properties, setProperties] = useState<Property[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const res = await fetch('/api/bookmarks')
-        if (res.status === 200) {
-          const data = await res.json()
-          setProperties(data)
-        }
-      } catch (error) {
-        console.error(error)
-        toast.error('Что-то пошло не так')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchProperties()
-  }, [])
-
-  if (loading) {
-    return <Loading />
-  }
-
+const Page: NextPage = async ({}) => {
+  const properties = await fetchSavedProperties()
   return (
     <section className="px-4 py-6">
       <h1 className="text-2xl mb-4 font-semibold text-center ">
@@ -42,7 +15,7 @@ const Page: NextPage = () => {
           <div>У вас нет сохренных закладок</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {properties.map(property => (
+            {properties.map((property: Property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
           </div>

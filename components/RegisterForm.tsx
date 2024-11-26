@@ -34,7 +34,6 @@ const RegisterForm = ({}) => {
   const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
     startTransition(async () => {
       const res = await registerAction(data)
-      console.log(res)
       if (res.error) {
         toast.error(res.error)
       }

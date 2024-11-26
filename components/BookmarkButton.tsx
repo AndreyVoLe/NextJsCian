@@ -1,5 +1,4 @@
 'use client'
-import { Property } from '@/utils/types/PropertyType'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { FaBookmark } from 'react-icons/fa'

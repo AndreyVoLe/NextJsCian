@@ -57,3 +57,6 @@
     transform: rotate(360deg);
   }
 }
+.disable:disabled {
+  background-color: gray;
+}

@@ -30,7 +30,6 @@ const LoginForm = ({}) => {
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
     startTransition(async () => {
       const res = await login(data)
-      console.log(res)
       if (res.error) {
         toast.error(res.error)
       }

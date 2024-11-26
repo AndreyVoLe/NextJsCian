@@ -7,12 +7,9 @@ export const formSearch = async (formData: FormData) => {
   const propertyType = formData.get('propertyType') as string
   const encodedLocation = encodeURIComponent(location)
   const encodedPropertyType = encodeURIComponent(propertyType)
-  console.log(location, propertyType)
   if (!location && propertyType === 'All') {
-    console.log('первый')
     redirect('/properties')
   } else {
-    console.log('второй')
     redirect(
       `/properties/search?location=${encodedLocation}&propertyType=${encodedPropertyType}`
     )
@@ -24,7 +21,6 @@ export const formSearchResults = async (
   propertyType: string
 ): Promise<any> => {
   const queryConditions: any = {}
-  console.log('что вошло в функцию........', location, propertyType)
   if (location) {
     queryConditions.OR = [
       { name: { contains: location, mode: 'insensitive' } },

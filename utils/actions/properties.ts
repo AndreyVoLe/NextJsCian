@@ -3,7 +3,7 @@ import { auth } from '@/auth'
 import cloudinary from '@/config/cloudinary'
 import { prisma } from '@/prisma'
 import { revalidateTag, unstable_cache } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { Property } from '../types/PropertyType'
 
 export const fetchThreeProperties = unstable_cache(
   async (): Promise<any> => {
@@ -136,10 +136,8 @@ export const addProperty = async (
 
 export const fetchProperties = unstable_cache(
   async (page: number): Promise<any> => {
-    console.log('page..................', page)
     const pageSize = 6
     const skip = (Number(page) - 1) * Number(pageSize)
-    console.log(skip)
     try {
       const properties = await prisma.property.findMany({
         orderBy: {
@@ -163,3 +161,56 @@ export const fetchProperties = unstable_cache(
   ['properties'],
   { revalidate: 604800, tags: ['properties'] }
 )
+
+export const fetchPropertyById = async (id: string): Promise<any> => {
+  try {
+    const property = await prisma.property.findUnique({
+      where: { id },
+      include: {
+        sellerInfo: true,
+        location: true,
+        rates: true,
+      },
+    })
+    return property
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const fetchSavedProperties = async (): Promise<any> => {
+  try {
+    const session = await auth()
+
+    if (!session || !session.user) {
+      return []
+    }
+    const userId = session.user.id
+
+    const bookmarkedProperties = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { bookmarks: true },
+    })
+
+    if (!bookmarkedProperties || !bookmarkedProperties.bookmarks) {
+      return []
+    }
+
+    const properties = await prisma.property.findMany({
+      where: {
+        id: {
+          in: bookmarkedProperties.bookmarks,
+        },
+      },
+      include: {
+        location: true,
+        rates: true,
+        sellerInfo: true,
+      },
+    })
+
+    return properties
+  } catch (error) {
+    console.error(error)
+  }
+}

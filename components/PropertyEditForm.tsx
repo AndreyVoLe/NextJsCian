@@ -160,7 +160,7 @@ const PropertyEditForm = () => {
 
       <div className="mb-4">
         <label htmlFor="type" className="block text-gray-700 font-bold mb-2">
-          Property Type
+          Тип недвижимости
         </label>
         <select
           id="type"
@@ -170,25 +170,23 @@ const PropertyEditForm = () => {
           value={fields.type}
           onChange={handleChange}
         >
-          <option value="Apartment">Apartment</option>
-          <option value="Condo">Condo</option>
-          <option value="House">House</option>
-          <option value="CabinOrCottage">Cabin or Cottage</option>
-          <option value="Room">Room</option>
-          <option value="Studio">Studio</option>
-          <option value="Other">Other</option>
+          <option value="Apartment">Квартира</option>
+          <option value="Studio">Студия</option>
+          <option value="House">Дом</option>
+          <option value="Cabin Or Cottage">Коттедж</option>
+          <option value="Room">Комната</option>
+          <option value="Other">Другое</option>
         </select>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 font-bold mb-2">
-          Listing Name
+          Название недвижимости
         </label>
         <input
           type="text"
           id="name"
           name="name"
           className="border rounded w-full py-2 px-3 mb-2"
-          placeholder="eg. Beautiful Apartment In Miami"
           required
           value={fields.name}
           onChange={handleChange}
@@ -199,27 +197,29 @@ const PropertyEditForm = () => {
           htmlFor="description"
           className="block text-gray-700 font-bold mb-2"
         >
-          Description
+          Описание
         </label>
         <textarea
           id="description"
           name="description"
           className="border rounded w-full py-2 px-3"
           rows={4}
-          placeholder="Add an optional description of your property"
+          placeholder="Опишите вашу недвижимость"
           value={fields.description}
           onChange={handleChange}
         ></textarea>
       </div>
 
       <div className="mb-4 bg-blue-50 p-4">
-        <label className="block text-gray-700 font-bold mb-2">Location</label>
+        <label className="block text-gray-700 font-bold mb-2">
+          Местоположение
+        </label>
         <input
           type="text"
           id="street"
           name="location.street"
           className="border rounded w-full py-2 px-3 mb-2"
-          placeholder="Street"
+          placeholder="Улица"
           value={fields.location.street}
           onChange={handleChange}
         />
@@ -228,7 +228,7 @@ const PropertyEditForm = () => {
           id="city"
           name="location.city"
           className="border rounded w-full py-2 px-3 mb-2"
-          placeholder="City"
+          placeholder="Город"
           required
           value={fields.location.city}
           onChange={handleChange}
@@ -238,7 +238,7 @@ const PropertyEditForm = () => {
           id="state"
           name="location.state"
           className="border rounded w-full py-2 px-3 mb-2"
-          placeholder="State"
+          placeholder="Область"
           required
           value={fields.location.state}
           onChange={handleChange}
@@ -248,7 +248,7 @@ const PropertyEditForm = () => {
           id="zipcode"
           name="location.zipcode"
           className="border rounded w-full py-2 px-3 mb-2"
-          placeholder="Zipcode"
+          placeholder="Почтовый индекс"
           value={fields.location.zipcode}
           onChange={handleChange}
         />
@@ -257,7 +257,7 @@ const PropertyEditForm = () => {
       <div className="mb-4 flex flex-wrap">
         <div className="w-full sm:w-1/3 pr-2">
           <label htmlFor="beds" className="block text-gray-700 font-bold mb-2">
-            Beds
+            Количество комнат
           </label>
           <input
             type="number"
@@ -271,7 +271,7 @@ const PropertyEditForm = () => {
         </div>
         <div className="w-full sm:w-1/3 px-2">
           <label htmlFor="baths" className="block text-gray-700 font-bold mb-2">
-            Baths
+            Ванных комнат
           </label>
           <input
             type="number"
@@ -288,7 +288,7 @@ const PropertyEditForm = () => {
             htmlFor="square_feet"
             className="block text-gray-700 font-bold mb-2"
           >
-            Square Feet
+            Квадратных метров
           </label>
           <input
             type="number"
@@ -303,7 +303,7 @@ const PropertyEditForm = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2">Amenities</label>
+        <label className="block text-gray-700 font-bold mb-2">Удобства</label>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           <div>
             <input
@@ -327,7 +327,9 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Full kitchen')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_kitchen">Full kitchen</label>
+            <label htmlFor="amenity_kitchen">
+              Полностью оборудованная кухня
+            </label>
           </div>
           <div>
             <input
@@ -339,7 +341,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Washer & Dryer')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_washer_dryer">Washer & Dryer</label>
+            <label htmlFor="amenity_washer_dryer">Стиральная машинка</label>
           </div>
           <div>
             <input
@@ -351,7 +353,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Free Parking')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_free_parking">Free Parking</label>
+            <label htmlFor="amenity_free_parking">Бесплатная парковка</label>
           </div>
           <div>
             <input
@@ -363,7 +365,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Swimming Pool')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_pool">Swimming Pool</label>
+            <label htmlFor="amenity_pool">Бассейн</label>
           </div>
           <div>
             <input
@@ -375,7 +377,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Hot Tub')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_hot_tub">Hot Tub</label>
+            <label htmlFor="amenity_hot_tub">Джакузи</label>
           </div>
           <div>
             <input
@@ -387,7 +389,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('24/7 Security')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_24_7_security">24/7 Security</label>
+            <label htmlFor="amenity_24_7_security">Охрана 24/7</label>
           </div>
           <div>
             <input
@@ -400,7 +402,7 @@ const PropertyEditForm = () => {
               onChange={handleAmenitiesChange}
             />
             <label htmlFor="amenity_wheelchair_accessible">
-              Wheelchair Accessible
+              Оборудование для инвалидов
             </label>
           </div>
           <div>
@@ -413,7 +415,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Elevator Access')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_elevator_access">Elevator Access</label>
+            <label htmlFor="amenity_elevator_access">Лифт</label>
           </div>
           <div>
             <input
@@ -425,7 +427,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Dishwasher')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_dishwasher">Dishwasher</label>
+            <label htmlFor="amenity_dishwasher">Посудомойка</label>
           </div>
           <div>
             <input
@@ -437,9 +439,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Gym/Fitness Center')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_gym_fitness_center">
-              Gym/Fitness Center
-            </label>
+            <label htmlFor="amenity_gym_fitness_center">Тренажерный зал</label>
           </div>
           <div>
             <input
@@ -451,7 +451,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Air Conditioning')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_air_conditioning">Air Conditioning</label>
+            <label htmlFor="amenity_air_conditioning">Кондиционер</label>
           </div>
           <div>
             <input
@@ -463,7 +463,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Balcony/Patio')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_balcony_patio">Balcony/Patio</label>
+            <label htmlFor="amenity_balcony_patio">Балкон/лоджия</label>
           </div>
           <div>
             <input
@@ -475,7 +475,7 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Smart TV')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_smart_tv">Smart TV</label>
+            <label htmlFor="amenity_smart_tv">Смарт ТВ</label>
           </div>
           <div>
             <input
@@ -487,19 +487,19 @@ const PropertyEditForm = () => {
               checked={fields.amenities.includes('Coffee Maker')}
               onChange={handleAmenitiesChange}
             />
-            <label htmlFor="amenity_coffee_maker">Coffee Maker</label>
+            <label htmlFor="amenity_coffee_maker">Кофе машина</label>
           </div>
         </div>
       </div>
 
       <div className="mb-4 bg-blue-50 p-4">
         <label className="block text-gray-700 font-bold mb-2">
-          Rates (Leave blank if not applicable)
+          Цена (Оставьте пустым, если неприменимо)
         </label>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
           <div className="flex items-center">
             <label htmlFor="weekly_rate" className="mr-2">
-              Weekly
+              Еженедельно
             </label>
             <input
               type="number"
@@ -512,7 +512,7 @@ const PropertyEditForm = () => {
           </div>
           <div className="flex items-center">
             <label htmlFor="monthly_rate" className="mr-2">
-              Monthly
+              Помесячно
             </label>
             <input
               type="number"
@@ -525,7 +525,7 @@ const PropertyEditForm = () => {
           </div>
           <div className="flex items-center">
             <label htmlFor="nightly_rate" className="mr-2">
-              Nightly
+              За ночь
             </label>
             <input
               type="number"
@@ -544,14 +544,14 @@ const PropertyEditForm = () => {
           htmlFor="sellerInfo.name"
           className="block text-gray-700 font-bold mb-2"
         >
-          Seller Name
+          Ваше имя
         </label>
         <input
           type="text"
           id="sellerInfo.name"
           name="sellerInfo.name"
           className="border rounded w-full py-2 px-3"
-          placeholder="Name"
+          placeholder="Имя"
           value={fields.sellerInfo.name}
           onChange={handleChange}
         />
@@ -561,14 +561,14 @@ const PropertyEditForm = () => {
           htmlFor="seller_email"
           className="block text-gray-700 font-bold mb-2"
         >
-          Seller Email
+          Ваша почта
         </label>
         <input
           type="email"
           id="seller_email"
           name="sellerInfo.email"
           className="border rounded w-full py-2 px-3"
-          placeholder="Email address"
+          placeholder="example@example.ru"
           required
           value={fields.sellerInfo.email}
           onChange={handleChange}
@@ -579,14 +579,14 @@ const PropertyEditForm = () => {
           htmlFor="seller_phone"
           className="block text-gray-700 font-bold mb-2"
         >
-          Seller Phone
+          Ваш телефон
         </label>
         <input
           type="tel"
           id="seller_phone"
           name="sellerInfo.phone"
           className="border rounded w-full py-2 px-3"
-          placeholder="Phone"
+          placeholder="+7 (123) 456-78-90"
           value={fields.sellerInfo.phone}
           onChange={handleChange}
         />
