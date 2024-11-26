@@ -133,3 +133,33 @@ export const addProperty = async (
   revalidateTag('properties')
   return { id: property.id }
 }
+
+export const fetchProperties = unstable_cache(
+  async (page: number): Promise<any> => {
+    console.log('page..................', page)
+    const pageSize = 6
+    const skip = (Number(page) - 1) * Number(pageSize)
+    console.log(skip)
+    try {
+      const properties = await prisma.property.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
+        skip,
+        take: Number(pageSize),
+        include: {
+          location: true,
+          rates: true,
+          sellerInfo: true,
+        },
+      })
+
+      const total = await prisma.property.count()
+      return { properties, total }
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  ['properties'],
+  { revalidate: 604800, tags: ['properties'] }
+)

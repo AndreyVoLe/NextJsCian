@@ -17,12 +17,13 @@ interface IPropertyCard {
 const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
   const getRateDisplay = () => {
     const { rates } = property
-    if (rates.monthly) {
-      return `${rates.monthly.toLocaleString()}/месяц`
-    } else if (rates.weekly) {
-      return `${rates.weekly.toLocaleString()}/неделя`
-    } else if (rates.nightly) {
-      return `${rates.nightly.toLocaleString()}/ночь`
+
+    if (rates?.monthly) {
+      return `${rates?.monthly.toLocaleString()}/месяц`
+    } else if (rates?.weekly) {
+      return `${rates?.weekly.toLocaleString()}/неделя`
+    } else if (rates?.nightly) {
+      return `${rates?.nightly.toLocaleString()}/ночь`
     }
   }
   return (
@@ -62,17 +63,17 @@ const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
         </div>
 
         <div className="flex justify-center gap-4 text-green-900 text-sm mb-4">
-          {property.rates.nightly !== 0 && (
+          {property.rates?.nightly !== 0 && (
             <div>
               <FaMoneyBill className="inline mr-2" /> Ночь
             </div>
           )}
-          {property.rates.weekly !== 0 && (
+          {property.rates?.weekly !== 0 && (
             <div>
               <FaMoneyBill className="inline mr-2" /> Неделя
             </div>
           )}
-          {property.rates.monthly !== 0 && (
+          {property.rates?.monthly !== 0 && (
             <div>
               <FaMoneyBill className="inline mr-2" /> Месяц
             </div>
@@ -86,7 +87,7 @@ const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
             <FaMapMarker className="inline text-orange-700 mt-1" />
             <span className="text-orange-700">
               {' '}
-              {property.location.city}, {property.location.state}
+              {property.location?.city}, {property.location?.state}
             </span>
           </div>
           <Link

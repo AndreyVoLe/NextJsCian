@@ -1,9 +1,10 @@
-import Loading from '@/app/(project)/loading'
+'use client'
 import { useGlobalContext } from '@/context/GlobalContext'
 import { timeTo24 } from '@/utils/time24h'
 import { Message } from '@/utils/types/PropertyType'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const MessagesCard = ({ message }: { message: Message }) => {
   const [messageRead, setMessageRead] = useState(false)
@@ -60,9 +61,11 @@ const MessagesCard = ({ message }: { message: Message }) => {
         },
       })
       if (response.status === 200) {
+        toast.success('Сообщение удалено')
         setMessageDeleted(true)
       }
     } catch (error) {
+      toast.error('Что-то пошло не так')
       console.error(error)
     }
   }
@@ -100,7 +103,7 @@ const MessagesCard = ({ message }: { message: Message }) => {
         </li>
         <li>
           <strong>Получено:</strong>
-          {timeTo24(message.createdAt.toLocaleString())}
+          {timeTo24(new Date(message.createdAt))}
         </li>
       </ul>
       {loading ? (

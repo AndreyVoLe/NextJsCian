@@ -1,6 +1,5 @@
-export const timeTo24 = (dateString: string) => {
-  const date = new Date(dateString)
-
+// Функция для форматирования даты в 24-часовом формате
+export const timeTo24 = (date: Date) => {
   // Определяем части даты
   const day = String(date.getUTCDate()).padStart(2, '0') // день
   const month = String(date.getUTCMonth() + 1).padStart(2, '0') // месяц (месяцы начинаются с 0, поэтому добавляем 1)
@@ -15,4 +14,4 @@ export const timeTo24 = (dateString: string) => {
   return formattedDate
 }
 
-// Создаем объект даты
+// Использование функции

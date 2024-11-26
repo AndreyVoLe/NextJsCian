@@ -29,21 +29,38 @@ interface SellerInfo {
 // Основной интерфейс для объекта недвижимости
 export interface Property {
   id: string
-  ownerId: string
-  name: string
-  type: string
-  description?: string | null
-  beds: number | string
-  baths: number | string
-  squareFeet?: number | string
-  amenities?: string[]
-  images: string[]
-  isFeatured?: boolean
-  createdAt?: Date // Можно использовать Date, если вы планируете работать с объектами Date
-  updatedAt?: Date // Аналогично, можно использовать Date
-  location: Location
-  rates: Rates
-  sellerInfo: SellerInfo
+  owner: User // Владелец
+  ownerId: string // ID владельца
+  name: string // Название
+  type: string // Тип недвижимости
+  description?: string | null // Описание
+  location?: Location | null // Местоположение
+  beds: number // Количество спален
+  baths: number // Количество ванных комнат
+  squareFeet: number // Площадь в квадратных футах
+  amenities: string[] // Удобства
+  rates: Rates | null // Цены
+  sellerInfo: SellerInfo | null // Информация о продавце
+  images: string[] // Изображения
+  isFeatured: boolean // Является ли объект выделенным
+  messages: Message[] // Сообщения
+  createdAt: Date // Дата создания
+  updatedAt: Date // Дата обновления
+}
+// Интерфейс для модели User
+export interface User {
+  id: string
+  email: string
+  emailVerified?: Date | null
+  username?: string | null
+  image?: string | null
+  password?: string | null
+  properties: Property[]
+  bookmarks: string[]
+  sentMessages: Message[]
+  receivedMessages: Message[]
+  createdAt: Date
+  updatedAt: Date
 }
 export interface Propert {
   name: string
@@ -79,3 +96,4 @@ export interface Message {
   createdAt: Date // Дата создания
   updatedAt: Date // Дата обновления
 }
+export type UserPropertiesResponse = Property[]
