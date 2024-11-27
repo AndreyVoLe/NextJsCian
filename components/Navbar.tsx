@@ -116,7 +116,7 @@ const Navbar: NextPage = ({}) => {
                       pathname === '/' ? 'bg-black' : ''
                     } text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
                   >
-                    Home
+                    Главная
                   </Link>
                   <Link
                     href="/properties"
@@ -124,7 +124,7 @@ const Navbar: NextPage = ({}) => {
                       pathname === '/properties' ? 'bg-black' : ''
                     } text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
                   >
-                    Properties
+                    Каталог
                   </Link>
                   {session && (
                     <Link
@@ -133,7 +133,7 @@ const Navbar: NextPage = ({}) => {
                         pathname === '/properties/add' ? 'bg-black' : ''
                       } text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
                     >
-                      Add Property
+                      Добавить недвижимость
                     </Link>
                   )}
                 </div>
@@ -152,7 +152,7 @@ const Navbar: NextPage = ({}) => {
                         className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
                       >
                         <FaGoogle className="text-white mr-2" />
-                        <span>Login or Register</span>
+                        <span>Войти или зарегистрироваться</span>
                       </button>
                     ))}
                 </div>
@@ -168,7 +168,7 @@ const Navbar: NextPage = ({}) => {
                     className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                   >
                     <span className="absolute -inset-1.5"></span>
-                    <span className="sr-only">View notifications</span>
+                    <span className="sr-only">Посмотреть уведомления</span>
                     <svg
                       className="h-6 w-6"
                       fill="none"
@@ -230,7 +230,7 @@ const Navbar: NextPage = ({}) => {
                       tabIndex={-1}
                       id="user-menu-item-0"
                     >
-                      Your Profile
+                      Ваш профиль
                     </Link>
 
                     <Link
@@ -243,7 +243,7 @@ const Navbar: NextPage = ({}) => {
                       tabIndex={-1}
                       id="user-menu-item-2"
                     >
-                      Saved Properties
+                      Сохраненные
                     </Link>
                     <button
                       onClick={() => {
@@ -255,7 +255,7 @@ const Navbar: NextPage = ({}) => {
                       tabIndex={-1}
                       id="user-menu-item-2"
                     >
-                      Sign Out
+                      Выйти из аккаунта
                     </button>
                   </div>
                 </div>
@@ -278,7 +278,7 @@ const Navbar: NextPage = ({}) => {
                 pathname === '/' ? 'bg-black' : ''
               } text-white block rounded-md px-3 py-2 text-base font-medium`}
             >
-              Home
+              Главная
             </Link>
             <Link
               onClick={() => setDropdownOpen(false)}
@@ -287,7 +287,7 @@ const Navbar: NextPage = ({}) => {
                 pathname === '/properties' ? 'bg-black' : ''
               } text-white block rounded-md px-3 py-2 text-base font-medium`}
             >
-              Properties
+              Каталог
             </Link>
             {session && (
               <Link
@@ -297,7 +297,7 @@ const Navbar: NextPage = ({}) => {
                   pathname === '/properties/add' ? 'bg-black' : ''
                 } text-white block rounded-md px-3 py-2 text-base font-medium`}
               >
-                Add Property
+                Добавить недвижимость
               </Link>
             )}
             {!session &&
@@ -312,7 +312,7 @@ const Navbar: NextPage = ({}) => {
                   className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
                 >
                   <FaGoogle className="text-white mr-2" />
-                  <span>Login or Register</span>
+                  <span>Войти или зарегистрироваться</span>
                 </button>
               ))}
           </div>

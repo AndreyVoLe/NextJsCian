@@ -73,6 +73,7 @@ const AsideFormTest = ({ property }: { property: Property }) => {
           name="phone"
           type="text"
           placeholder="Enter your phone number"
+          required
         />
       </div>
       <div className="mb-4">
@@ -87,6 +88,7 @@ const AsideFormTest = ({ property }: { property: Property }) => {
           id="message"
           name="message"
           placeholder="Enter your message"
+          required
         ></textarea>
       </div>
       <div>

@@ -2,41 +2,36 @@ import { auth } from '@/auth'
 import { prisma } from '@/prisma'
 import { NextRequest } from 'next/server'
 
-export const GET = async (
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) => {
-  // Логируем входные параметры
+// export const GET = async (
+//   req: NextRequest,
+//   { params }: { params: Promise<{ id: string }> }
+// ) => {
+//   try {
+//     const paramsId = (await params).id
 
-  try {
-    const paramsId = (await params).id
-    // Логируем параметры для отладки
+//     const property = await prisma.property.findUnique({
+//       where: { id: paramsId },
+//       include: {
+//         sellerInfo: true,
+//         location: true,
+//         rates: true,
+//       },
+//     })
 
-    // Ищем свойство по идентификатору
-    const property = await prisma.property.findUnique({
-      where: { id: paramsId },
-      include: {
-        sellerInfo: true,
-        location: true,
-        rates: true,
-      },
-    })
-
-    if (!property) {
-      return new Response('Property Not Found', { status: 404 })
-    } else {
-      return new Response(JSON.stringify(property), {
-        status: 200,
-      })
-    }
-  } catch (error) {
-    console.error(error)
-    // Логируем ошибку
-    return new Response('Something went wrong', {
-      status: 500,
-    })
-  }
-}
+//     if (!property) {
+//       return new Response('Property Not Found', { status: 404 })
+//     } else {
+//       return new Response(JSON.stringify(property), {
+//         status: 200,
+//       })
+//     }
+//   } catch (error) {
+//     console.error(error)
+//     return new Response('Something went wrong', {
+//       status: 500,
+//     })
+//   }
+// }
 
 export const DELETE = async (
   req: NextRequest,

@@ -3,45 +3,45 @@ import { prisma } from '@/prisma'
 
 export const dynamic = 'force-dynamic'
 
-export const GET = async () => {
-  try {
-    const session = await auth()
+// export const GET = async () => {
+//   try {
+//     const session = await auth()
 
-    if (!session || !session.user) {
-      return new Response('User id is required', { status: 401 })
-    }
-    const userId = session.user.id
+//     if (!session || !session.user) {
+//       return new Response('User id is required', { status: 401 })
+//     }
+//     const userId = session.user.id
 
-    const bookmarkedProperties = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { bookmarks: true },
-    })
+//     const bookmarkedProperties = await prisma.user.findUnique({
+//       where: { id: userId },
+//       select: { bookmarks: true },
+//     })
 
-    if (!bookmarkedProperties || !bookmarkedProperties.bookmarks) {
-      return new Response(JSON.stringify([]), { status: 200 })
-    }
+//     if (!bookmarkedProperties || !bookmarkedProperties.bookmarks) {
+//       return new Response(JSON.stringify([]), { status: 200 })
+//     }
 
-    const properties = await prisma.property.findMany({
-      where: {
-        id: {
-          in: bookmarkedProperties.bookmarks,
-        },
-      },
-      include: {
-        location: true,
-        rates: true,
-        sellerInfo: true,
-      },
-    })
+//     const properties = await prisma.property.findMany({
+//       where: {
+//         id: {
+//           in: bookmarkedProperties.bookmarks,
+//         },
+//       },
+//       include: {
+//         location: true,
+//         rates: true,
+//         sellerInfo: true,
+//       },
+//     })
 
-    return new Response(JSON.stringify(properties), { status: 200 })
-  } catch (error) {
-    console.error('Error toggling property in bookmarks:', error)
-    return new Response('Failed load saved bookmarks', {
-      status: 500,
-    })
-  }
-}
+//     return new Response(JSON.stringify(properties), { status: 200 })
+//   } catch (error) {
+//     console.error('Error toggling property in bookmarks:', error)
+//     return new Response('Failed load saved bookmarks', {
+//       status: 500,
+//     })
+//   }
+// }
 
 export const POST = async (req: Request) => {
   try {

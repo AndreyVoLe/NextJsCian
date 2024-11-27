@@ -84,6 +84,7 @@ const PropertyAddForm = () => {
           name="location.street"
           className="border rounded w-full py-2 px-3 mb-2"
           placeholder="Улица"
+          required
         />
         <input
           type="text"
@@ -107,6 +108,7 @@ const PropertyAddForm = () => {
           name="location.zipcode"
           className="border rounded w-full py-2 px-3 mb-2"
           placeholder="Почтовый индекс"
+          required
         />
       </div>
 
@@ -362,6 +364,7 @@ const PropertyAddForm = () => {
           name="seller_info.name"
           className="border rounded w-full py-2 px-3"
           placeholder="Имя"
+          required
         />
       </div>
       <div className="mb-4">
@@ -393,6 +396,7 @@ const PropertyAddForm = () => {
           name="seller_info.phone"
           className="border rounded w-full py-2 px-3"
           placeholder="+7 (123) 456-78-90"
+          required
         />
       </div>
 
@@ -408,7 +412,6 @@ const PropertyAddForm = () => {
           accept="image/*"
           multiple
           required
-          max={4}
         />
       </div>
 

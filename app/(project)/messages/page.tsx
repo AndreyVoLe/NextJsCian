@@ -2,7 +2,6 @@ import { auth } from '@/auth'
 import Messages from '@/components/Messages'
 import MessagesCard from '@/components/MessagesCard'
 import { getMessages } from '@/utils/actions/messages'
-import { Message } from '@/utils/types/PropertyType'
 import { NextPage } from 'next'
 
 const Page: NextPage = async ({}) => {

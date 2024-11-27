@@ -10,24 +10,28 @@ export const registerAction = async (data: z.infer<typeof RegisterSchema>) => {
   if (!validatedField.success) {
     return { error: 'Invalid fields' }
   }
+  try {
+    const { email, password, name } = validatedField.data
 
-  const { email, password, name } = validatedField.data
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
 
-  const salt = await bcrypt.genSalt(10)
-  const hashedPassword = await bcrypt.hash(password, salt)
+    const existingUser = await prisma.user.findUnique({ where: { email } })
+    if (existingUser) {
+      return { error: 'User already exists' }
+    }
 
-  const existingUser = await prisma.user.findUnique({ where: { email } })
-  if (existingUser) {
-    return { error: 'User already exists' }
+    await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        username: name,
+      },
+    })
+
+    return { success: 'Регистрация прошла успешно!' }
+  } catch (error) {
+    console.error(error)
+    return { error: 'Что-то пошло не так' }
   }
-
-  await prisma.user.create({
-    data: {
-      email,
-      password: hashedPassword,
-      username: name,
-    },
-  })
-
-  return { success: 'Регистрация прошла успешно!' }
 }

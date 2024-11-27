@@ -1,7 +1,7 @@
-import { auth } from '@/auth'
-import { prisma } from '@/prisma'
+// import { auth } from '@/auth'
+// import { prisma } from '@/prisma'
 
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
 
 // export const GET = async () => {
 //   const session = await auth()
@@ -42,60 +42,60 @@ export const dynamic = 'force-dynamic'
 //   }
 // }
 
-export const POST = async (req: Request) => {
-  try {
-    const session = await auth()
-    const sessionUser = session?.user
+// export const POST = async (req: Request) => {
+//   try {
+//     const session = await auth()
+//     const sessionUser = session?.user
 
-    if (!sessionUser || !sessionUser.id) {
-      return new Response(JSON.stringify({ message: 'Вы не авторизованы' }), {
-        status: 401,
-      })
-    }
-    const {
-      email,
-      phone,
-      message,
-      property,
-      recipient,
-      name,
-    }: {
-      email: string
-      phone: string
-      messageBody: string
-      property: string
-      recipient: string
-      name: string
-      message: string
-    } = await req.json()
+//     if (!sessionUser || !sessionUser.id) {
+//       return new Response(JSON.stringify({ message: 'Вы не авторизованы' }), {
+//         status: 401,
+//       })
+//     }
+//     const {
+//       email,
+//       phone,
+//       message,
+//       property,
+//       recipient,
+//       name,
+//     }: {
+//       email: string
+//       phone: string
+//       messageBody: string
+//       property: string
+//       recipient: string
+//       name: string
+//       message: string
+//     } = await req.json()
 
-    if (sessionUser.id === recipient) {
-      return new Response(
-        JSON.stringify({
-          message: 'Ты не можешь отправлять сообщение самому себе',
-        }),
-        { status: 400 }
-      )
-    }
-    await prisma.message.create({
-      data: {
-        email,
-        phone,
-        propertyId: property,
-        recipientId: recipient,
-        name,
-        senderId: sessionUser.id,
-        body: message,
-      },
-    })
-    return new Response(
-      JSON.stringify({ message: 'Ваше сообщение отправлено' }),
-      { status: 200 }
-    )
-  } catch (error) {
-    console.error(error)
-    return new Response(JSON.stringify({ message: 'Что-то пошло не так' }), {
-      status: 500,
-    })
-  }
-}
+//     if (sessionUser.id === recipient) {
+//       return new Response(
+//         JSON.stringify({
+//           message: 'Ты не можешь отправлять сообщение самому себе',
+//         }),
+//         { status: 400 }
+//       )
+//     }
+//     await prisma.message.create({
+//       data: {
+//         email,
+//         phone,
+//         propertyId: property,
+//         recipientId: recipient,
+//         name,
+//         senderId: sessionUser.id,
+//         body: message,
+//       },
+//     })
+//     return new Response(
+//       JSON.stringify({ message: 'Ваше сообщение отправлено' }),
+//       { status: 200 }
+//     )
+//   } catch (error) {
+//     console.error(error)
+//     return new Response(JSON.stringify({ message: 'Что-то пошло не так' }), {
+//       status: 500,
+//     })
+//   }
+// }
