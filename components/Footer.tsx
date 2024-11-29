@@ -14,16 +14,16 @@ const Footer: NextPage = ({}) => {
         <div className="flex flex-wrap justify-center md:justify-start mb-4 md:mb-0">
           <ul className="flex space-x-4">
             <li>
-              <Link href="/properties">Properties</Link>
+              <Link href="/properties">Аренда</Link>
             </li>
             <li>
-              <Link href="/terms">Terms of Service</Link>
+              <Link href="/terms">Условия обслуживания</Link>
             </li>
           </ul>
         </div>
         <div>
           <p className="text-sm text-gray-500 mt-2 md:mt-0">
-            &copy; {currentYear} PropertyPulse. All rights reserved.
+            &copy; {currentYear} Cian. Все права защищены.
           </p>
         </div>
       </div>

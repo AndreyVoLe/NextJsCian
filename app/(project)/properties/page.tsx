@@ -10,6 +10,7 @@ interface Props {
 
 const PropertiesPageTest: NextPage<Props> = async ({ searchParams }) => {
   const searchParam = await searchParams
+
   const page = searchParam.page || 1
   const res = await fetchProperties(Number(page))
   const pageSize = 6

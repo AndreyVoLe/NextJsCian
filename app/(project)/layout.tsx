@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer'
-import Navbar from '@/components/Navbar'
+import Header from '@/components/Header'
 import { GlobalProvider } from '@/context/GlobalContext'
 
 export default function DashboardLayout({
@@ -9,9 +9,11 @@ export default function DashboardLayout({
 }) {
   return (
     <GlobalProvider>
-      <Navbar />
-      <main>{children}</main>
-      <Footer />
+      <div className="page">
+        <Header />
+        <main className="main">{children}</main>
+        <Footer />
+      </div>
     </GlobalProvider>
   )
 }

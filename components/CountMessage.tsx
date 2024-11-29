@@ -1,27 +1,28 @@
 'use client'
-
 import { useGlobalContext } from '@/context/GlobalContext'
+import { getTotalCount } from '@/utils/actions/messages'
+import { Session } from 'next-auth'
 import { useEffect } from 'react'
-
-const CountMessage = () => {
+interface Props {
+  session: Session | null
+}
+const CountMessage = ({ session }: Props) => {
   const { totalCount, setTotalCount } = useGlobalContext()
   useEffect(() => {
-    const fetchTotalCount = async () => {
+    const fetchTotal = async () => {
       try {
-        const response = await fetch('/api/messages/unreadTotal')
-        if (response.ok) {
-          const data = await response.json()
-          setTotalCount(data)
-        } else {
-          console.error('Failed to fetch total count')
+        const total = await getTotalCount()
+        if (total) {
+          setTotalCount(total)
         }
       } catch (error) {
-        console.error('Error fetching total count:', error)
+        console.error(error)
       }
     }
+    fetchTotal()
+  }, [setTotalCount])
+  if (!session) return
 
-    fetchTotalCount()
-  }, [])
   return totalCount < 1 ? (
     ''
   ) : (

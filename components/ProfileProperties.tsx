@@ -40,7 +40,7 @@ export default function ProfileProperties({
     }
   }
   return (
-    <div className="md:w-3/4 md:pl-4">
+    <div className="md:w-3/4 md:pl-4 pt-5 md:pt-0">
       <h2 className="text-xl font-semibold mb-4">Your Listings</h2>
       {properties.length === 0 && <div>У вас пока нет property listing</div>}
 
@@ -69,7 +69,7 @@ export default function ProfileProperties({
               href={`/properties/${proper.id}/edit`}
               className="bg-blue-500 text-white px-[18px] py-2.5 rounded-md mr-2 hover:bg-blue-600 "
             >
-              Edit
+              Изменить
             </Link>
             <button
               onClick={() => handleDeleteProperty(proper.id)}

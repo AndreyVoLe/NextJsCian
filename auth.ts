@@ -1,69 +1,37 @@
-import NextAuth, { DefaultSession } from 'next-auth'
-import Google from 'next-auth/providers/google'
+import NextAuth from 'next-auth'
+import authConfig from './auth.config'
+import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from './prisma'
-import { AdapterSession, AdapterUser } from 'next-auth/adapters'
+import { getUserById } from './utils/data'
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-      authorization: {
-        params: {
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code',
-        },
-      },
-    }),
-  ],
-
+export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
-    // authorized: async ({ auth }) => {
-    //   return !!auth
-    // },
-    async signIn({ profile }) {
-      if (!profile || !profile.email) {
-        console.error('Profile is undefined')
-        return false // Отказываем в входе, если profile не определён
+    async session({ token, session }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub
       }
 
-      // 1. Check if user exists
-      const userExists = await prisma.user.findUnique({
-        where: { email: profile.email },
-      })
-
-      // 2. If not, then add user to database
-      if (!userExists) {
-        // Truncate user name if too long
-        const username = profile.name
-          ? profile.name.slice(0, 20)
-          : 'User' + profile.email.split('@')[0]
-
-        await prisma.user.create({
-          data: {
-            email: profile.email,
-            username,
-            image: profile.picture,
-          },
-        })
+      if (token.role && session.user) {
+        session.user.role = token.role as 'ADMIN' | 'USER'
       }
-      // 3. Return true to allow sign in
-      return true
-    },
-    // Modifies the session object
-    async session({ session }) {
-      // 1. Get user from database
-      const user = await prisma.user.findUnique({
-        where: { email: session.user.email },
-      })
-      if (user) {
-        session.user.id = user.id
-      }
-      // 2. Assign the user id to the session
-      // Используем id из Prisma
-      // 3. return session
       return session
     },
+
+    async jwt({ token }) {
+      if (!token.sub) return token
+
+      const existingUser = await getUserById(token.sub)
+
+      if (!existingUser) return token
+
+      token.role = existingUser.role
+
+      return token
+    },
   },
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: 'jwt',
+  },
+  ...authConfig,
 })

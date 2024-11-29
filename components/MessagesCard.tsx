@@ -26,7 +26,7 @@ const MessagesCard = ({ message }: { message: Message }) => {
       }
     }
     fetchIsRead()
-  }, [])
+  }, [message.id])
   const handleRead = async () => {
     try {
       const response = await fetch(`/api/messages/${message.id}`, {
@@ -112,7 +112,7 @@ const MessagesCard = ({ message }: { message: Message }) => {
         <button
           onClick={handleRead}
           className={`mt-4 text-white py-1 px-3 rounded-md mr-4 ${
-            messageRead ? 'bg-slate-600' : 'bg-blue-500'
+            messageRead ? 'bg-slate-600 cursor-default' : 'bg-blue-500'
           }`}
           disabled={loading}
         >

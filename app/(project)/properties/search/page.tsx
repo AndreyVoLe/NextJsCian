@@ -1,4 +1,3 @@
-'use server'
 import PropertyCard from '@/components/PropertyCard'
 import PropertySearch from '@/components/PropertySearch'
 import { formSearchResults } from '@/utils/actions/search'
@@ -24,14 +23,16 @@ const Page: NextPage = async ({ searchParams }: any) => {
         <div className="container-xl lg:container m-auto px-4 py-6">
           <Link
             href="/properties"
-            className="text-blue-500 hover:text-blue-600 flex items-center"
+            className="text-blue-500 hover:text-blue-600 flex items-center mb-10 md:mb-0"
           >
-            <FaArrowAltCircleLeft className="mr-1" />
-            Back to Properties
+            <FaArrowAltCircleLeft className="mr-1 " />
+            Назад к списку
           </Link>
           <h1 className="text-2xl mb-4 text-center">Результаты поиска:</h1>
           {properties.length === 0 ? (
-            <div>Результаты поиска не найдены</div>
+            <div className="text-xl text-center mt-10">
+              Результаты поиска не найдены
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {properties.map((property: Property) => (

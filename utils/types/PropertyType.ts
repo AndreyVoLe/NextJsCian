@@ -1,4 +1,3 @@
-// Интерфейс для информации о местоположении
 interface Location {
   id?: string
   propertyId?: string
@@ -8,7 +7,6 @@ interface Location {
   zipcode: string
 }
 
-// Интерфейс для цен
 interface Rates {
   id?: string
   propertyId?: string
@@ -17,7 +15,6 @@ interface Rates {
   monthly: number | string
 }
 
-// Интерфейс для информации о продавце
 interface SellerInfo {
   id?: string
   propertyId?: string
@@ -26,33 +23,31 @@ interface SellerInfo {
   phone: string
 }
 
-// Основной интерфейс для объекта недвижимости
 export interface Property {
   id: string
-  owner: User // Владелец
-  ownerId: string // ID владельца
-  name: string // Название
-  type: string // Тип недвижимости
-  description?: string | null // Описание
-  location?: Location | null // Местоположение
-  beds: number // Количество спален
-  baths: number // Количество ванных комнат
-  squareFeet: number // Площадь в квадратных футах
-  amenities: string[] // Удобства
-  rates: Rates | null // Цены
-  sellerInfo: SellerInfo | null // Информация о продавце
-  images: string[] // Изображения
-  isFeatured: boolean // Является ли объект выделенным
-  messages: Message[] // Сообщения
-  createdAt: Date // Дата создания
-  updatedAt: Date // Дата обновления
+  owner: User
+  ownerId: string
+  name: string
+  type: string
+  description?: string | null
+  location?: Location | null
+  beds: number
+  baths: number
+  squareFeet: number
+  amenities: string[]
+  rates: Rates | null
+  sellerInfo: SellerInfo | null
+  images: string[]
+  isFeatured: boolean
+  messages: Message[]
+  createdAt: Date
+  updatedAt: Date
 }
-// Интерфейс для модели User
 export interface User {
   id: string
   email: string
   emailVerified?: Date | null
-  username?: string | null
+  name?: string | null
   image?: string | null
   password?: string | null
   properties: Property[]
@@ -70,30 +65,29 @@ export interface Propert {
   baths: number | string
   squareFeet: number | string
   amenities: string[]
-  // Аналогично, можно использовать Date
   location: Location
   rates: Rates
   sellerInfo: SellerInfo
 }
 
 export interface Message {
-  id: string // Уникальный идентификатор
-  senderId: string // ID отправителя
+  id: string
+  senderId: string
   sender: {
-    username: string // Имя отправителя
+    username: string
   }
-  recipientId: string // ID получателя
-  propertyId: string // ID недвижимости
+  recipientId: string
+  propertyId: string
   property: {
     name: string
-    id: string // Название недвижимости
+    id: string
   }
-  name: string // Имя
-  email: string // Электронная почта
-  phone?: string // Телефон (опционально)
-  body?: string // Сообщение (опционально)
-  read: boolean // Прочитано ли сообщение
-  createdAt: Date // Дата создания
-  updatedAt: Date // Дата обновления
+  name: string
+  email: string
+  phone?: string
+  body?: string
+  read: boolean
+  createdAt: Date
+  updatedAt: Date
 }
 export type UserPropertiesResponse = Property[]

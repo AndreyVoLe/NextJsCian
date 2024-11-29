@@ -15,7 +15,7 @@ export const getMessages = async (userId: string) => {
       include: {
         sender: {
           select: {
-            username: true,
+            name: true,
           },
         },
         property: {
@@ -69,5 +69,25 @@ export const sentMessage = async (
     return { message: 'Сообщение успешно отправлено' }
   } catch (error) {
     return { message: 'Произошла ошибка' }
+  }
+}
+
+export const getTotalCount = async (): Promise<number | undefined> => {
+  const session = await auth()
+  const sessionUser = session?.user
+  if (!session) return
+  try {
+    if (sessionUser && sessionUser.id) {
+      const total = await prisma.message.findMany({
+        where: {
+          recipientId: sessionUser.id,
+          read: false,
+        },
+      })
+
+      return total.length
+    }
+  } catch (error) {
+    console.error(error)
   }
 }

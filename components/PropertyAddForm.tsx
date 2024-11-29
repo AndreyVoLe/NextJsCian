@@ -1,7 +1,14 @@
 'use client'
 import { addProperty } from '@/utils/actions/properties'
+import Loading from '@/utils/loadingClient'
 import { useRouter } from 'next/navigation'
-import { useActionState, useEffect, useState } from 'react'
+import {
+  FormEvent,
+  startTransition,
+  useActionState,
+  useEffect,
+  useState,
+} from 'react'
 import { toast } from 'react-toastify'
 
 const PropertyAddForm = () => {
@@ -14,7 +21,6 @@ const PropertyAddForm = () => {
     }
   }, [state?.error])
 
-  // Перенаправление при успешном добавлении
   useEffect(() => {
     if (state?.id) {
       toast.success('Недвижимость успешно добавлена')
@@ -22,8 +28,24 @@ const PropertyAddForm = () => {
     }
   }, [state?.id, router])
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.currentTarget)
+    const images = formData.getAll('images')
+
+    if (images.length > 4) {
+      toast.error('Вы можете загрузить не более 4 изображений.')
+      return
+    }
+
+    startTransition(() => {
+      action(formData)
+    })
+  }
+
   return (
-    <form action={action}>
+    <form onSubmit={handleSubmit}>
       <h2 className="text-3xl text-center font-semibold mb-6">
         Добавить недвижимость
       </h2>
@@ -38,12 +60,12 @@ const PropertyAddForm = () => {
           className="border rounded w-full py-2 px-3"
           required
         >
-          <option value="Apartment">Квартира</option>
-          <option value="Studio">Студия</option>
-          <option value="House">Дом</option>
-          <option value="Cabin Or Cottage">Коттедж</option>
-          <option value="Room">Комната</option>
-          <option value="Other">Другое</option>
+          <option value="Квартира">Квартира</option>
+          <option value="Студия">Студия</option>
+          <option value="Дом">Дом</option>
+          <option value="Коттедж">Коттедж</option>
+          <option value="Комната">Комната</option>
+          <option value="Другое">Другое</option>
         </select>
       </div>
       <div className="mb-4">
@@ -114,14 +136,17 @@ const PropertyAddForm = () => {
 
       <div className="mb-4 flex flex-wrap">
         <div className="w-full sm:w-1/3 pr-2">
-          <label htmlFor="beds" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="beds"
+            className="block text-gray-700 font-bold mb-2 ml-2 md:ml-0"
+          >
             Количество комнат
           </label>
           <input
             type="number"
             id="beds"
             name="beds"
-            className="border rounded w-full py-2 px-3"
+            className="border rounded w-full py-2 px-3 ml-2 md:ml-0"
             required
           />
         </div>
@@ -172,27 +197,27 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_kitchen"
               name="amenities"
-              value="Full kitchen"
+              value="Оборуд. кухня"
               className="mr-2"
             />
-            <label htmlFor="amenity_kitchen">Оборудованная кухня</label>
+            <label htmlFor="amenity_kitchen">Оборуд. кухня</label>
           </div>
           <div>
             <input
               type="checkbox"
               id="amenity_washer_dryer"
               name="amenities"
-              value="Washer & Dryer"
+              value="Стиральная машинка"
               className="mr-2"
             />
-            <label htmlFor="amenity_washer_dryer">Стиральная машинка</label>
+            <label htmlFor="amenity_washer_dryer">Стиральная машина</label>
           </div>
           <div>
             <input
               type="checkbox"
               id="amenity_free_parking"
               name="amenities"
-              value="Free Parking"
+              value="Бесплатная парковка"
               className="mr-2"
             />
             <label htmlFor="amenity_free_parking">Бесплатная парковка</label>
@@ -202,7 +227,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_pool"
               name="amenities"
-              value="Swimming Pool"
+              value="Бассейн"
               className="mr-2"
             />
             <label htmlFor="amenity_pool">Бассейн</label>
@@ -212,7 +237,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_hot_tub"
               name="amenities"
-              value="Hot Tub"
+              value="Джакузи"
               className="mr-2"
             />
             <label htmlFor="amenity_hot_tub">Джакузи</label>
@@ -222,7 +247,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_24_7_security"
               name="amenities"
-              value="24/7 Security"
+              value="Охрана 24/7"
               className="mr-2"
             />
             <label htmlFor="amenity_24_7_security">Охрана 24/7</label>
@@ -232,7 +257,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_wheelchair_accessible"
               name="amenities"
-              value="Wheelchair Accessible"
+              value="Для инвалидов"
               className="mr-2"
             />
             <label htmlFor="amenity_wheelchair_accessible">Для инвалидов</label>
@@ -242,7 +267,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_elevator_access"
               name="amenities"
-              value="Elevator Access"
+              value="Лифт"
               className="mr-2"
             />
             <label htmlFor="amenity_elevator_access">Лифт</label>
@@ -252,7 +277,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_dishwasher"
               name="amenities"
-              value="Dishwasher"
+              value="Посудомойка"
               className="mr-2"
             />
             <label htmlFor="amenity_dishwasher">Посудомойка</label>
@@ -262,7 +287,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_gym_fitness_center"
               name="amenities"
-              value="Gym/Fitness Center"
+              value="Тренажерный зал"
               className="mr-2"
             />
             <label htmlFor="amenity_gym_fitness_center">Тренажерный зал</label>
@@ -272,7 +297,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_air_conditioning"
               name="amenities"
-              value="Air Conditioning"
+              value="Кондиционер"
               className="mr-2"
             />
             <label htmlFor="amenity_air_conditioning">Кондиционер</label>
@@ -282,7 +307,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_balcony_patio"
               name="amenities"
-              value="Balcony/Patio"
+              value="Балкон/лоджия"
               className="mr-2"
             />
             <label htmlFor="amenity_balcony_patio">Балкон/лоджия</label>
@@ -292,7 +317,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_smart_tv"
               name="amenities"
-              value="Smart TV"
+              value="Смарт ТВ"
               className="mr-2"
             />
             <label htmlFor="amenity_smart_tv">Смарт ТВ</label>
@@ -302,7 +327,7 @@ const PropertyAddForm = () => {
               type="checkbox"
               id="amenity_coffee_maker"
               name="amenities"
-              value="Coffee Maker"
+              value="Кофе машина"
               className="mr-2"
             />
             <label htmlFor="amenity_coffee_maker">Кофе машина</label>
@@ -316,8 +341,8 @@ const PropertyAddForm = () => {
         </label>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
           <div className="flex items-center">
-            <label htmlFor="weekly_rate" className="mr-2">
-              Еженедельно
+            <label htmlFor="weekly_rate" className="mr-2 w-[60px]">
+              Неделя
             </label>
             <input
               type="number"
@@ -327,8 +352,8 @@ const PropertyAddForm = () => {
             />
           </div>
           <div className="flex items-center">
-            <label htmlFor="monthly_rate" className="mr-2">
-              Помесячно
+            <label htmlFor="monthly_rate" className="mr-2 w-[80px] ">
+              Месяц
             </label>
             <input
               type="number"
@@ -338,7 +363,7 @@ const PropertyAddForm = () => {
             />
           </div>
           <div className="flex items-center">
-            <label htmlFor="nightly_rate" className="mr-2">
+            <label htmlFor="nightly_rate" className="mr-2 w-[85px] ">
               Ночь
             </label>
             <input
@@ -395,7 +420,7 @@ const PropertyAddForm = () => {
           id="seller_phone"
           name="seller_info.phone"
           className="border rounded w-full py-2 px-3"
-          placeholder="+7 (123) 456-78-90"
+          placeholder="+7 (999) 999-99-99"
           required
         />
       </div>
@@ -428,6 +453,7 @@ const PropertyAddForm = () => {
           Добавить недвижимость
         </button>
       </div>
+      {isPending && <Loading />}
     </form>
   )
 }

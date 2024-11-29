@@ -3,15 +3,14 @@ import { auth } from '@/auth'
 import cloudinary from '@/config/cloudinary'
 import { prisma } from '@/prisma'
 import { revalidateTag, unstable_cache } from 'next/cache'
-import { Property } from '../types/PropertyType'
 
 export const fetchThreeProperties = unstable_cache(
   async (): Promise<any> => {
     try {
       const properties = await prisma.property.findMany({
-        take: 3, // Ограничиваем выборку тремя записями
+        take: 3,
         orderBy: {
-          createdAt: 'desc', // Сортируем по дате создания в порядке убывания
+          createdAt: 'desc',
         },
         include: {
           location: true,
@@ -212,5 +211,33 @@ export const fetchSavedProperties = async (): Promise<any> => {
     return properties
   } catch (error) {
     console.error(error)
+  }
+}
+
+export const deleteProperty = async (id: string): Promise<any> => {
+  try {
+    await prisma.location.deleteMany({
+      where: { propertyId: id },
+    })
+
+    await prisma.rates.deleteMany({
+      where: { propertyId: id },
+    })
+
+    await prisma.sellerInfo.deleteMany({
+      where: { propertyId: id },
+    })
+    await prisma.message.deleteMany({
+      where: { propertyId: id },
+    })
+
+    await prisma.property.delete({
+      where: { id },
+    })
+    revalidateTag('properties')
+    return { message: 'Недвижимость удалена' }
+  } catch (error) {
+    console.error(error)
+    return { message: 'Something went wrong' }
   }
 }

@@ -9,12 +9,15 @@ import {
 } from 'react-icons/fa'
 import Link from 'next/link'
 import { Property } from '@/utils/types/PropertyType'
+import DeleteProperty from './DeleteProperty'
+import { auth } from '@/auth'
 
 interface IPropertyCard {
   property: Property
 }
 
-const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
+const PropertyCard: NextPage<IPropertyCard> = async ({ property }) => {
+  const session = await auth()
   const getRateDisplay = () => {
     const { rates } = property
 
@@ -50,17 +53,17 @@ const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
 
         <div className="flex justify-center gap-4 text-gray-500 mb-4">
           <div>
-            <FaBed className="inline mr-2" /> {property.beds}
-            <span className="md:hidden lg:inline">Beds</span>
+            <FaBed className="inline mr-1" /> {property.beds}{' '}
+            <span className="md:hidden lg:inline">кр</span>
           </div>
           <div>
-            <FaBath className="inline mr-2" /> {property.baths}
-            <span className="md:hidden lg:inline">Baths</span>
+            <FaBath className="inline mr-1" /> {property.baths}{' '}
+            <span className="md:hidden lg:inline">ванн</span>
           </div>
           <div>
-            <FaRulerCombined className="inline mr-2" />
-            {property.squareFeet}
-            <span className="md:hidden lg:inline">sqft</span>
+            <FaRulerCombined className="inline mr-1" />
+            {property.squareFeet}{' '}
+            <span className="md:hidden lg:inline">м²</span>
           </div>
         </div>
 
@@ -92,11 +95,14 @@ const PropertyCard: NextPage<IPropertyCard> = ({ property }) => {
               {property.location?.city}, {property.location?.state}
             </span>
           </div>
+          {session?.user.role === 'ADMIN' && (
+            <DeleteProperty propertyId={property.id} />
+          )}
           <Link
             href={`/properties/${property.id}`}
             className="h-[36px] bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center text-sm"
           >
-            Details
+            Подробнее
           </Link>
         </div>
       </div>

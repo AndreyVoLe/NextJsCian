@@ -41,8 +41,9 @@ const Page: NextPage<Props> = async ({ params }) => {
                 propertyName={property.name}
               />
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-bold mb-6">
-                  Свяжитесь с менеджером
+                <h3 className="text-xl font-semibold mb-6">
+                  Задавайте свои вопросы. Оставьте свои контакты, мы свяжемся с
+                  вами
                 </h3>
                 <AsideForm property={property} />
               </div>

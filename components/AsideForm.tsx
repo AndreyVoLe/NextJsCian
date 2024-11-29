@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 
 const AsideFormTest = ({ property }: { property: Property }) => {
   const [pending, setPending] = useState(false)
+  const [isSent, setIsSent] = useState(false)
   const ref = useRef<HTMLFormElement | null>(null)
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -18,6 +19,7 @@ const AsideFormTest = ({ property }: { property: Property }) => {
     if (res.message === 'Сообщение успешно отправлено') {
       if (ref.current) {
         ref.current.reset()
+        setIsSent(true)
       }
       toast.success(res.message)
     } else {
@@ -26,7 +28,9 @@ const AsideFormTest = ({ property }: { property: Property }) => {
     setPending(false)
   }
 
-  return (
+  return isSent ? (
+    <p>Ваше сообщение отправлено.</p>
+  ) : (
     <form ref={ref} onSubmit={handleSubmit}>
       <div className="mb-4">
         <label
@@ -40,7 +44,7 @@ const AsideFormTest = ({ property }: { property: Property }) => {
           id="name"
           name="name"
           type="text"
-          placeholder="Enter your name"
+          placeholder="Введите ваше имя"
           required
         />
       </div>
@@ -56,7 +60,7 @@ const AsideFormTest = ({ property }: { property: Property }) => {
           id="email"
           name="email"
           type="email"
-          placeholder="Enter your email"
+          placeholder="Введите вашу почту"
           required
         />
       </div>
@@ -72,7 +76,7 @@ const AsideFormTest = ({ property }: { property: Property }) => {
           id="phone"
           name="phone"
           type="text"
-          placeholder="Enter your phone number"
+          placeholder="Введите ваш телефон"
           required
         />
       </div>
@@ -87,7 +91,7 @@ const AsideFormTest = ({ property }: { property: Property }) => {
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 h-44 focus:outline-none focus:shadow-outline"
           id="message"
           name="message"
-          placeholder="Enter your message"
+          placeholder="Напишите ваше сообщение"
           required
         ></textarea>
       </div>

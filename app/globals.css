@@ -60,3 +60,17 @@
 .disable:disabled {
   background-color: gray;
 }
+
+body {
+  height: 100%;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1 1 auto;
+}

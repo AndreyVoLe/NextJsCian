@@ -1,37 +1,38 @@
 import { auth } from '@/auth'
 import { prisma } from '@/prisma'
+import { revalidateTag } from 'next/cache'
 import { NextRequest } from 'next/server'
 
-// export const GET = async (
-//   req: NextRequest,
-//   { params }: { params: Promise<{ id: string }> }
-// ) => {
-//   try {
-//     const paramsId = (await params).id
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) => {
+  try {
+    const paramsId = (await params).id
 
-//     const property = await prisma.property.findUnique({
-//       where: { id: paramsId },
-//       include: {
-//         sellerInfo: true,
-//         location: true,
-//         rates: true,
-//       },
-//     })
+    const property = await prisma.property.findUnique({
+      where: { id: paramsId },
+      include: {
+        sellerInfo: true,
+        location: true,
+        rates: true,
+      },
+    })
 
-//     if (!property) {
-//       return new Response('Property Not Found', { status: 404 })
-//     } else {
-//       return new Response(JSON.stringify(property), {
-//         status: 200,
-//       })
-//     }
-//   } catch (error) {
-//     console.error(error)
-//     return new Response('Something went wrong', {
-//       status: 500,
-//     })
-//   }
-// }
+    if (!property) {
+      return new Response('Property Not Found', { status: 404 })
+    } else {
+      return new Response(JSON.stringify(property), {
+        status: 200,
+      })
+    }
+  } catch (error) {
+    console.error(error)
+    return new Response('Something went wrong', {
+      status: 500,
+    })
+  }
+}
 
 export const DELETE = async (
   req: NextRequest,
@@ -50,9 +51,7 @@ export const DELETE = async (
     if (!sessionUser || !sessionUser.id) {
       return new Response('User Id is requred', { status: 401 })
     }
-    // Логируем параметры для отладки
 
-    // Ищем свойство по идентификатору
     const proper = await prisma.property.findUnique({
       where: { id: paramsId, ownerId: sessionUser.id },
       include: {
@@ -64,7 +63,6 @@ export const DELETE = async (
     if (!proper) {
       return new Response('Property Not Found', { status: 404 })
     } else {
-      // Удаление связанных записей
       await prisma.location.deleteMany({
         where: { propertyId: paramsId },
       })
@@ -76,18 +74,21 @@ export const DELETE = async (
       await prisma.sellerInfo.deleteMany({
         where: { propertyId: paramsId },
       })
+      await prisma.message.deleteMany({
+        where: { propertyId: paramsId },
+      })
 
-      // Удаление самого свойства
       await prisma.property.delete({
         where: { id: paramsId },
       })
     }
+    revalidateTag('properties')
     return new Response('Вы успешно удалили имущество', { status: 200 })
   } catch (error) {
     console.error(
       'Error occurred:',
       error instanceof Error ? error.message : error
-    ) // Логируем ошибку
+    )
     return new Response('Something went wrong', {
       status: 500,
     })
@@ -191,7 +192,7 @@ export const PUT = async (
         owner: { connect: { id: propertyData.owner } },
       },
     })
-
+    revalidateTag('properties')
     return new Response(JSON.stringify(property), { status: 200 })
   } catch (error) {
     console.error(error)

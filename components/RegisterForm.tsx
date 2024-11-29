@@ -83,7 +83,7 @@ const RegisterForm = ({}) => {
           className={`mt-1 block w-full p-2 border ${
             errors.name ? 'border-red-500' : 'border-gray-300'
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-          placeholder="Введите ваш email"
+          placeholder="Введите ваше имя"
         />
         {errors.name && (
           <p className="text-red-500 text-sm">{errors.name.message}</p>

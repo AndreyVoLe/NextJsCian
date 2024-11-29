@@ -11,20 +11,6 @@ export const GET = async (
       return new Response('User ID is required')
     }
 
-    // const properties = await prisma.user.findUnique({
-    //   where: {
-    //     owner: paramsId,
-    //   },
-    //   include: {
-    //     properties: {
-    //       include: {
-    //         location: true,
-    //         sellerInfo: true,
-    //         rates: true,
-    //       },
-    //     },
-    //   },
-    // })
     const properties = await prisma.property.findMany({
       where: {
         ownerId: paramsId,

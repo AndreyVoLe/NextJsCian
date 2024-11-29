@@ -60,20 +60,6 @@ export const PUT = async (
         status: 401,
       })
     }
-    const {
-      recipientId,
-    }: {
-      recipientId: string
-    } = await req.json()
-
-    // if (sessionUser.id === recipientId) {
-    //   return new Response(
-    //     JSON.stringify({
-    //       message: 'Ты не можешь читать чужие сообщения',
-    //     }),
-    //     { status: 400 }
-    //   )
-    // }
 
     const message = await prisma.message.findUnique({
       where: { id: paramsId },
@@ -85,7 +71,6 @@ export const PUT = async (
       })
     }
 
-    // Проверьте, что пользователь является отправителем или получателем сообщения
     if (message.recipientId !== sessionUser.id) {
       return new Response(
         JSON.stringify({ message: 'У вас нет доступа к этому сообщению' }),
@@ -95,7 +80,6 @@ export const PUT = async (
       )
     }
 
-    // Измените состояние поля read
     const updatedMessage = await prisma.message.update({
       where: { id: paramsId },
       data: { read: true },
@@ -129,22 +113,13 @@ export const GET = async (
 
     const message = await prisma.message.findUnique({
       where: { id: paramsId },
+      select: { read: true },
     })
 
     if (!message) {
       return new Response(JSON.stringify({ message: 'Сообщение не найдено' }), {
         status: 404,
       })
-    }
-
-    // Проверьте, что пользователь является отправителем или получателем сообщения
-    if (message.recipientId !== sessionUser.id) {
-      return new Response(
-        JSON.stringify({ message: 'У вас нет доступа к этому сообщению' }),
-        {
-          status: 403,
-        }
-      )
     }
 
     return new Response(JSON.stringify(message.read), { status: 200 })

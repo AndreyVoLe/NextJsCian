@@ -10,6 +10,8 @@ import { z } from 'zod'
 
 const LoginForm = ({}) => {
   const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState('')
+  console.log(error)
 
   const [showPassword, setShowPassword] = useState(false)
   const handleMouseDown = () => setShowPassword(true)
@@ -30,11 +32,9 @@ const LoginForm = ({}) => {
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
     startTransition(async () => {
       const res = await login(data)
-      if (res.error) {
+      if (res && res.error) {
         toast.error(res.error)
-      }
-      if (res.success) {
-        toast.success(res.success)
+        setError(res.error)
       }
     })
   }
@@ -96,7 +96,7 @@ const LoginForm = ({}) => {
           <p className="text-red-500 text-sm">{errors.password.message}</p>
         )}
       </div>
-
+      {error && <p className="text-red-500 text-sm">{error}</p>}
       <button
         type="submit"
         className={`w-full py-2 rounded-md transition duration-200 ${

@@ -32,11 +32,12 @@ export default function BookmarkButton({ propertyId }: { propertyId: string }) {
           toast.success('Недвижимость добавлена в закладки')
         } else {
           setIsBookmarked(false)
-          toast.error('Недвижимость удалена из закладок')
+          toast.success('Недвижимость удалена из закладок')
         }
       }
     } catch (error) {
       console.error(error)
+      toast.error('Что-то пошло не так, попробуй позже')
     }
   }
   useEffect(() => {

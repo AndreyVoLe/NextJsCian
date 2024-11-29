@@ -11,6 +11,9 @@ export const getUserProperties = unstable_cache(
     }
     try {
       const properties = await prisma.property.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
         where: {
           ownerId: userId,
         },
