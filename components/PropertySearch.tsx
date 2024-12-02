@@ -29,12 +29,12 @@ const PropertySearch = () => {
           className="w-full px-4 py-3 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring focus:ring-blue-500"
         >
           <option value="All">Все</option>
-          <option value="Apartment">Квартира</option>
-          <option value="Studio">Студия</option>
-          <option value="House">Дом</option>
-          <option value="Cabin Or Cottage">Коттедж</option>
-          <option value="Room">Комната</option>
-          <option value="Other">Другое</option>
+          <option value="Квартира">Квартира</option>
+          <option value="Студия">Студия</option>
+          <option value="Дом">Дом</option>
+          <option value="Коттедж">Коттедж</option>
+          <option value="Комната">Комната</option>
+          <option value="Другое">Другое</option>
         </select>
       </div>
       <button
