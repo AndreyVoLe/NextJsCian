@@ -1,160 +1,34 @@
 'use client'
-import { fetchProperty } from '@/utils/fetch'
+
+import { updatePropertyForm } from '@/utils/actions/profile'
 import Loading from '@/utils/loadingClient'
-import { Propert } from '@/utils/types/PropertyType'
-import { useParams, useRouter } from 'next/navigation'
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useActionState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-const PropertyEditForm = () => {
-  const [loading, setLoading] = useState(true)
-  const [pending, setPending] = useState(false)
-  const { id } = useParams()
+const PropertyEditForm = ({ property }: { property: any }) => {
+  console.log(property)
   const router = useRouter()
-  const [fields, setFields] = useState<Propert>({
-    name: '',
-    type: 'Apartment',
-    description: '',
-    location: {
-      street: '',
-      city: '',
-      state: '',
-      zipcode: '',
-    },
-    beds: '',
-    baths: '',
-    squareFeet: '',
-    amenities: [],
-    rates: {
-      weekly: '',
-      monthly: '',
-      nightly: '',
-    },
-    sellerInfo: {
-      name: '',
-      email: '',
-      phone: '',
-    },
-  })
-  const handleChange = (
-    e: ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | any
-    >
-  ) => {
-    const { name, value, type, checked } = e.target
-
-    if (type === 'checkbox') {
-      // Обработка изменения для чекбоксов
-      const amenities = checked
-        ? [...fields.amenities, value]
-        : fields.amenities.filter(amenity => amenity !== value)
-      setFields(prevFields => ({ ...prevFields, amenities }))
-    } else if (name.startsWith('location.')) {
-      // Обработка изменения для полей location
-      const locationField = name.split('.')[1]
-      setFields(prevFields => ({
-        ...prevFields,
-        location: { ...prevFields.location, [locationField]: value },
-      }))
-    } else if (name.startsWith('rates.')) {
-      // Обработка изменения для полей rates
-      const rateField = name.split('.')[1]
-      setFields(prevFields => ({
-        ...prevFields,
-        rates: { ...prevFields.rates, [rateField]: Number(value) },
-      }))
-    } else if (name.startsWith('sellerInfo.')) {
-      // Обработка изменения для полей seller_info
-      const sellerField = name.split('.')[1]
-      setFields(prevFields => ({
-        ...prevFields,
-        sellerInfo: { ...prevFields.sellerInfo, [sellerField]: value },
-      }))
-    } else {
-      // Обработка изменения для остальных полей
-      const valueToSet = ['beds', 'baths', 'square_feet'].includes(name)
-        ? Number(value)
-        : value
-      setFields(prevFields => ({ ...prevFields, [name]: valueToSet }))
-    }
-  }
-
-  const handleAmenitiesChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = e.target
-    const amenities = checked
-      ? [...fields.amenities, value]
-      : fields.amenities.filter(amenity => amenity !== value)
-    setFields(prevFields => ({ ...prevFields, amenities }))
-  }
+  const [state, action, isPending] = useActionState(
+    updatePropertyForm.bind(null, property.id),
+    null
+  )
   useEffect(() => {
-    const fetchPropertyEdit = async () => {
-      try {
-        if (!id) return
-        const idString = Array.isArray(id) ? id[0] : id
-        const propertyData = await fetchProperty(idString)
-        if (!propertyData) {
-          throw new Error('No property Data')
-        }
-        setFields(propertyData)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setLoading(false)
-      }
+    if (state?.error) {
+      toast.error(state.error)
     }
-    fetchPropertyEdit()
-  }, [id])
+  }, [state?.error, property.id])
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setPending(true)
-    const formData = new FormData()
-
-    formData.append('type', fields.type)
-    formData.append('name', fields.name)
-    formData.append('description', fields.description)
-    formData.append('location.street', fields.location.street)
-    formData.append('location.city', fields.location.city)
-    formData.append('location.state', fields.location.state)
-    formData.append('location.zipcode', fields.location.zipcode)
-    formData.append('beds', fields.beds.toString())
-    formData.append('baths', fields.baths.toString())
-    formData.append('squareFeet', fields.squareFeet.toString())
-
-    fields.amenities.forEach(amenity => {
-      formData.append('amenities', amenity)
-    })
-
-    formData.append('rates.weekly', fields.rates.weekly.toString())
-    formData.append('rates.monthly', fields.rates.monthly.toString())
-    formData.append('rates.nightly', fields.rates.nightly.toString())
-
-    formData.append('sellerInfo.name', fields.sellerInfo.name)
-    formData.append('sellerInfo.email', fields.sellerInfo.email)
-    formData.append('sellerInfo.phone', fields.sellerInfo.phone)
-    try {
-      const res = await fetch(`/api/properties/${id}`, {
-        method: 'PUT',
-        body: formData,
-      })
-      if (res.status === 200) {
-        toast.success('Недвижимость успешно изменена')
-        router.push(`/properties/${id}`)
-      } else if (res.status === 401 || res.status === 403) {
-        console.error('401 403')
-      } else {
-        console.error('Something went wrong')
-        toast.error('Что-то пошло не так, попробуйте позже')
-      }
-    } catch (error) {
-      console.error('Something went wr')
-    } finally {
-      setPending(false)
+  useEffect(() => {
+    if (state?.success) {
+      toast.success('Недвижимость успешно добавлена')
+      router.push(`/properties/${property.id}`)
     }
-  }
+  }, [state?.success, router, property.id])
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form action={action}>
         <h2 className="text-3xl text-center font-semibold mb-6">
           Изменить недвижимость
         </h2>
@@ -168,8 +42,7 @@ const PropertyEditForm = () => {
             name="type"
             className="border rounded w-full py-2 px-3"
             required
-            value={fields.type}
-            onChange={handleChange}
+            defaultValue={property.type}
           >
             <option value="Квартира">Квартира</option>
             <option value="Студия">Студия</option>
@@ -189,8 +62,7 @@ const PropertyEditForm = () => {
             name="name"
             className="border rounded w-full py-2 px-3 mb-2"
             required
-            value={fields.name}
-            onChange={handleChange}
+            defaultValue={property.name}
           />
         </div>
         <div className="mb-4">
@@ -206,8 +78,7 @@ const PropertyEditForm = () => {
             className="border rounded w-full py-2 px-3"
             rows={4}
             placeholder="Опишите вашу недвижимость"
-            value={fields.description}
-            onChange={handleChange}
+            defaultValue={property.description}
           ></textarea>
         </div>
 
@@ -221,8 +92,8 @@ const PropertyEditForm = () => {
             name="location.street"
             className="border rounded w-full py-2 px-3 mb-2"
             placeholder="Улица"
-            value={fields.location.street}
-            onChange={handleChange}
+            defaultValue={property.location.street}
+            required
           />
           <input
             type="text"
@@ -231,8 +102,7 @@ const PropertyEditForm = () => {
             className="border rounded w-full py-2 px-3 mb-2"
             placeholder="Город"
             required
-            value={fields.location.city}
-            onChange={handleChange}
+            defaultValue={property.location.city}
           />
           <input
             type="text"
@@ -241,8 +111,7 @@ const PropertyEditForm = () => {
             className="border rounded w-full py-2 px-3 mb-2"
             placeholder="Область"
             required
-            value={fields.location.state}
-            onChange={handleChange}
+            defaultValue={property.location.state}
           />
           <input
             type="text"
@@ -250,8 +119,8 @@ const PropertyEditForm = () => {
             name="location.zipcode"
             className="border rounded w-full py-2 px-3 mb-2"
             placeholder="Почтовый индекс"
-            value={fields.location.zipcode}
-            onChange={handleChange}
+            defaultValue={property.location.zipcode}
+            required
           />
         </div>
 
@@ -269,8 +138,7 @@ const PropertyEditForm = () => {
               name="beds"
               className="border rounded w-full py-2 px-3 ml-2 md:ml-0"
               required
-              value={fields.beds}
-              onChange={handleChange}
+              defaultValue={property.beds}
             />
           </div>
           <div className="w-full sm:w-1/3 px-2">
@@ -286,8 +154,7 @@ const PropertyEditForm = () => {
               name="baths"
               className="border rounded w-full py-2 px-3"
               required
-              value={fields.baths}
-              onChange={handleChange}
+              defaultValue={property.baths}
             />
           </div>
           <div className="w-full sm:w-1/3 pl-2">
@@ -299,12 +166,11 @@ const PropertyEditForm = () => {
             </label>
             <input
               type="number"
-              id="squareFeet"
-              name="squareFeet"
+              id="square_feet"
+              name="square_feet"
               className="border rounded w-full py-2 px-3"
               required
-              value={fields.squareFeet}
-              onChange={handleChange}
+              defaultValue={property.squareFeet}
             />
           </div>
         </div>
@@ -319,8 +185,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Wifi"
                 className="mr-2"
-                checked={fields.amenities.includes('Wifi')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Wifi')}
               />
               <label htmlFor="amenity_wifi">Wifi</label>
             </div>
@@ -331,8 +196,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Оборуд. кухня"
                 className="mr-2"
-                checked={fields.amenities.includes('Оборуд. кухня')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Оборуд. кухня')}
               />
               <label htmlFor="amenity_kitchen">Оборуд. кухня</label>
             </div>
@@ -343,8 +207,9 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Стиральная машина"
                 className="mr-2"
-                checked={fields.amenities.includes('Стиральная машина')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes(
+                  'Стиральная машина'
+                )}
               />
               <label htmlFor="amenity_washer_dryer">Стиральная машина</label>
             </div>
@@ -355,8 +220,9 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Бесплатная парковка"
                 className="mr-2"
-                checked={fields.amenities.includes('Бесплатная парковка')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes(
+                  'Бесплатная парковка'
+                )}
               />
               <label htmlFor="amenity_free_parking">Бесплатная парковка</label>
             </div>
@@ -367,8 +233,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Бассейн"
                 className="mr-2"
-                checked={fields.amenities.includes('Бассейн')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Бассейн')}
               />
               <label htmlFor="amenity_pool">Бассейн</label>
             </div>
@@ -379,8 +244,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Джакузи"
                 className="mr-2"
-                checked={fields.amenities.includes('Джакузи')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Джакузи')}
               />
               <label htmlFor="amenity_hot_tub">Джакузи</label>
             </div>
@@ -391,8 +255,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Охрана 24/7"
                 className="mr-2"
-                checked={fields.amenities.includes('Охрана 24/7')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Охрана 24/7')}
               />
               <label htmlFor="amenity_24_7_security">Охрана 24/7</label>
             </div>
@@ -403,8 +266,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Для инвалидов"
                 className="mr-2"
-                checked={fields.amenities.includes('Для инвалидов')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Для инвалидов')}
               />
               <label htmlFor="amenity_wheelchair_accessible">
                 Для инвалидов
@@ -417,8 +279,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Лифт"
                 className="mr-2"
-                checked={fields.amenities.includes('Лифт')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Лифт')}
               />
               <label htmlFor="amenity_elevator_access">Лифт</label>
             </div>
@@ -429,8 +290,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Посудомойка"
                 className="mr-2"
-                checked={fields.amenities.includes('Посудомойка')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Посудомойка')}
               />
               <label htmlFor="amenity_dishwasher">Посудомойка</label>
             </div>
@@ -441,8 +301,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Тренажерный зал"
                 className="mr-2"
-                checked={fields.amenities.includes('Тренажерный зал')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Тренажерный зал')}
               />
               <label htmlFor="amenity_gym_fitness_center">
                 Тренажерный зал
@@ -455,8 +314,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Кондиционер"
                 className="mr-2"
-                checked={fields.amenities.includes('Кондиционер')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Кондиционер')}
               />
               <label htmlFor="amenity_air_conditioning">Кондиционер</label>
             </div>
@@ -467,8 +325,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Балкон/лоджия"
                 className="mr-2"
-                checked={fields.amenities.includes('Балкон/лоджия')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Балкон/лоджия')}
               />
               <label htmlFor="amenity_balcony_patio">Балкон/лоджия</label>
             </div>
@@ -479,8 +336,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Смарт ТВ"
                 className="mr-2"
-                checked={fields.amenities.includes('Смарт ТВ')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Смарт ТВ')}
               />
               <label htmlFor="amenity_smart_tv">Смарт ТВ</label>
             </div>
@@ -491,8 +347,7 @@ const PropertyEditForm = () => {
                 name="amenities"
                 value="Кофе машина"
                 className="mr-2"
-                checked={fields.amenities.includes('Кофе машина')}
-                onChange={handleAmenitiesChange}
+                defaultChecked={property.amenities.includes('Кофе машина')}
               />
               <label htmlFor="amenity_coffee_maker">Кофе машина</label>
             </div>
@@ -501,7 +356,7 @@ const PropertyEditForm = () => {
 
         <div className="mb-4 bg-blue-50 p-4">
           <label className="block text-gray-700 font-bold mb-2">
-            Цена (Оставьте пустым, если неприменимо)
+            Цена в рублях (Оставьте пустым, если неприменимо)
           </label>
           <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
             <div className="flex items-center">
@@ -513,8 +368,7 @@ const PropertyEditForm = () => {
                 id="weekly_rate"
                 name="rates.weekly"
                 className="border rounded w-full py-2 px-3"
-                value={fields.rates.weekly}
-                onChange={handleChange}
+                defaultValue={property.rates.weekly}
               />
             </div>
             <div className="flex items-center">
@@ -526,8 +380,7 @@ const PropertyEditForm = () => {
                 id="monthly_rate"
                 name="rates.monthly"
                 className="border rounded w-full py-2 px-3"
-                value={fields.rates.monthly}
-                onChange={handleChange}
+                defaultValue={property.rates.monthly}
               />
             </div>
             <div className="flex items-center">
@@ -539,8 +392,7 @@ const PropertyEditForm = () => {
                 id="nightly_rate"
                 name="rates.nightly"
                 className="border rounded w-full py-2 px-3"
-                value={fields.rates.nightly}
-                onChange={handleChange}
+                defaultValue={property.rates.nightly}
               />
             </div>
           </div>
@@ -556,11 +408,11 @@ const PropertyEditForm = () => {
           <input
             type="text"
             id="sellerInfo.name"
-            name="sellerInfo.name"
+            name="seller_info.name"
             className="border rounded w-full py-2 px-3"
             placeholder="Имя"
-            value={fields.sellerInfo.name}
-            onChange={handleChange}
+            defaultValue={property.sellerInfo.name}
+            required
           />
         </div>
         <div className="mb-4">
@@ -573,12 +425,11 @@ const PropertyEditForm = () => {
           <input
             type="email"
             id="seller_email"
-            name="sellerInfo.email"
+            name="seller_info.email"
             className="border rounded w-full py-2 px-3"
             placeholder="example@example.ru"
             required
-            value={fields.sellerInfo.email}
-            onChange={handleChange}
+            defaultValue={property.sellerInfo.email}
           />
         </div>
         <div className="mb-4">
@@ -591,25 +442,29 @@ const PropertyEditForm = () => {
           <input
             type="tel"
             id="seller_phone"
-            name="sellerInfo.phone"
+            name="seller_info.phone"
             className="border rounded w-full py-2 px-3"
             placeholder="+7 (123) 456-78-90"
-            value={fields.sellerInfo.phone}
-            onChange={handleChange}
+            required
+            defaultValue={property.sellerInfo.phone}
           />
         </div>
 
         <div>
           <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
+            className={`${
+              isPending
+                ? 'opacity-50 cursor-not-allowed bg-slate-500 hover:bg-slate-600'
+                : 'bg-blue-500 hover:bg-blue-600'
+            } text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline`}
             type="submit"
+            disabled={isPending}
           >
             Изменить недвижимость
           </button>
         </div>
       </form>
-      {loading && <Loading />}
-      {pending && <Loading />}
+      {isPending && <Loading />}
     </>
   )
 }

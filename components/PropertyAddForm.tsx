@@ -315,7 +315,7 @@ const PropertyAddForm = () => {
 
       <div className="mb-4 bg-blue-50 p-4">
         <label className="block text-gray-700 font-bold mb-2">
-          Цена (Оставьте пустым, если неприменимо)
+          Цена в рублях (Оставьте пустым, если неприменимо)
         </label>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
           <div className="flex items-center">
@@ -405,7 +405,7 @@ const PropertyAddForm = () => {
 
       <div className="mb-4">
         <label htmlFor="images" className="block text-gray-700 font-bold mb-2">
-          Выберите фотографии. Максимум 6
+          Выберите фотографии. Максимум 4
         </label>
         <input
           type="file"

@@ -1,11 +1,11 @@
 'use client'
 
+import { deleteProfileProperty } from '@/utils/actions/profile'
 import { Property } from '@/utils/types/PropertyType'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useOptimistic, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { set } from 'zod'
 
 export default function ProfileProperties({
   property,
@@ -23,17 +23,16 @@ export default function ProfileProperties({
 
     try {
       setPending(true)
-      const res = await fetch(`/api/properties/${id}`, { method: 'DELETE' })
-      if (res.status === 200) {
+      const res = await deleteProfileProperty(id)
+      if (res.success) {
         const updatedProperties = properties.filter(proper => proper.id !== id)
 
         setProperties(updatedProperties)
-        toast.success('Вы успешно удалили лот недвижимости')
+        toast.success(res.success)
       } else {
-        toast.error('Не удалось удалить')
+        toast.error(res.error)
       }
     } catch (error) {
-      toast.error('Не удалось удалить')
       console.error(error)
     } finally {
       setPending(false)
@@ -41,8 +40,10 @@ export default function ProfileProperties({
   }
   return (
     <div className="md:w-3/4 md:pl-4 pt-5 md:pt-0">
-      <h2 className="text-xl font-semibold mb-4">Your Listings</h2>
-      {properties.length === 0 && <div>У вас пока нет property listing</div>}
+      <h2 className="text-xl font-semibold mb-4">Ваш список недвижимостей</h2>
+      {properties.length === 0 && (
+        <div>У вас пока нет списка недвижимостей</div>
+      )}
 
       {properties.map((proper: any) => (
         <div key={proper.id} className="mb-10">
