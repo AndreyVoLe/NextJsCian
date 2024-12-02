@@ -3,6 +3,7 @@ import { auth } from '@/auth'
 import cloudinary from '@/config/cloudinary'
 import { prisma } from '@/prisma'
 import { revalidateTag, unstable_cache } from 'next/cache'
+import { unstable_rethrow } from 'next/navigation'
 
 export const fetchThreeProperties = unstable_cache(
   async (): Promise<any> => {
@@ -43,6 +44,10 @@ export const addProperty = async (
   const images: any = formData
     .getAll('images')
     .filter((image: any) => image.name !== '')
+
+  if (images.length > 4) {
+    return { error: 'Вы можете загрузить не более 4 изображений.' }
+  }
 
   const propertyData = {
     type: String(formData.get('type') ?? ''),
@@ -210,6 +215,8 @@ export const fetchSavedProperties = async (): Promise<any> => {
 
     return properties
   } catch (error) {
+    unstable_rethrow(error)
+
     console.error(error)
   }
 }

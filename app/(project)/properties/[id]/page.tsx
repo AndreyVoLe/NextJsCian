@@ -1,3 +1,4 @@
+import { auth } from '@/auth'
 import AsideForm from '@/components/AsideForm'
 import BookmarkButton from '@/components/BookmarkButton'
 import PropertyDetails from '@/components/PropertyDetails'
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const Page: NextPage<Props> = async ({ params }) => {
+  const session = await auth()
   const id = (await params).id
   const property = await fetchPropertyById(id)
   return (
@@ -34,20 +36,22 @@ const Page: NextPage<Props> = async ({ params }) => {
         <div className="container m-auto py-10 px-6">
           <div className="grid grid-cols-1 md:grid-cols-70/30 w-full gap-6">
             <PropertyDetails property={property} />
-            <aside className="space-y-4">
-              <BookmarkButton propertyId={property.id} />
-              <ShareButton
-                propertyId={property.id}
-                propertyName={property.name}
-              />
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold mb-6">
-                  Задавайте свои вопросы. Оставьте свои контакты, мы свяжемся с
-                  вами
-                </h3>
-                <AsideForm property={property} />
-              </div>
-            </aside>
+            {session && session.user.id && (
+              <aside className="space-y-4">
+                <BookmarkButton propertyId={property.id} session={session} />
+                <ShareButton
+                  propertyId={property.id}
+                  propertyName={property.name}
+                />
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-xl font-semibold mb-6">
+                    Задавайте свои вопросы. Оставьте свои контакты, мы свяжемся
+                    с вами
+                  </h3>
+                  <AsideForm property={property} />
+                </div>
+              </aside>
+            )}
           </div>
         </div>
       </section>

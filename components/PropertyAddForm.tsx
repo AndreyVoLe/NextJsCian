@@ -2,13 +2,7 @@
 import { addProperty } from '@/utils/actions/properties'
 import Loading from '@/utils/loadingClient'
 import { useRouter } from 'next/navigation'
-import {
-  FormEvent,
-  startTransition,
-  useActionState,
-  useEffect,
-  useState,
-} from 'react'
+import { FormEvent, useActionState, useEffect, useTransition } from 'react'
 import { toast } from 'react-toastify'
 
 const PropertyAddForm = () => {
@@ -28,24 +22,8 @@ const PropertyAddForm = () => {
     }
   }, [state?.id, router])
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    const formData = new FormData(event.currentTarget)
-    const images = formData.getAll('images')
-
-    if (images.length > 4) {
-      toast.error('Вы можете загрузить не более 4 изображений.')
-      return
-    }
-
-    startTransition(() => {
-      action(formData)
-    })
-  }
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form action={action}>
       <h2 className="text-3xl text-center font-semibold mb-6">
         Добавить недвижимость
       </h2>
@@ -427,7 +405,7 @@ const PropertyAddForm = () => {
 
       <div className="mb-4">
         <label htmlFor="images" className="block text-gray-700 font-bold mb-2">
-          Фотографии потом добавить нельзя(
+          Выберите фотографии. Максимум 6
         </label>
         <input
           type="file"

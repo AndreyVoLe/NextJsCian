@@ -11,7 +11,6 @@ import { z } from 'zod'
 const LoginForm = ({}) => {
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState('')
-  console.log(error)
 
   const [showPassword, setShowPassword] = useState(false)
   const handleMouseDown = () => setShowPassword(true)

@@ -1,14 +1,18 @@
 'use client'
+import { Session } from 'next-auth'
 import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { use, useEffect, useState } from 'react'
 import { FaBookmark } from 'react-icons/fa'
 import { toast } from 'react-toastify'
-
-export default function BookmarkButton({ propertyId }: { propertyId: string }) {
-  const { data: session } = useSession()
-  const userId = session?.user?.id
+interface Props {
+  session: Session | null
+  propertyId: string
+}
+export default function BookmarkButton({ propertyId, session }: Props) {
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [loading, setLoading] = useState(true)
+  const userId = session?.user?.id
 
   const handleClick = async () => {
     if (!userId) {

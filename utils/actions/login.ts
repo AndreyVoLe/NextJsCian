@@ -31,6 +31,6 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
           return { error: 'Что-то пошло не так' }
       }
     }
-    throw error //Для того, чтобы не сработал redirectTo
+    throw error
   }
 }
