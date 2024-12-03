@@ -81,8 +81,9 @@ export default function MobileMenu({
             }}
             className="flex items-center bg-gray-700 hover:bg-gray-900 rounded-md px-3 py-2"
           >
-            <FaGoogle className="text-white mr-2" />
-            <span>Войти или зарегистрироваться</span>
+            <span className="text-white text-sm">
+              Войти или зарегистрироваться
+            </span>
           </Link>
         )}
       </div>
